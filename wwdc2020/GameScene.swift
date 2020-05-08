@@ -13,60 +13,55 @@ final class GameScene: SKScene {
 
     // MARK: - Properties
     let gameLayer: GameLayer
-    let movableAnalogic: GMAnalogControl
-
+    let hudLayer: HudLayer
+    let backgroundLayer: BackgroundLayer
+    
     // MARK: - Inits
     override init(size: CGSize) {
         self.gameLayer = GameLayer(size: size)
-        let analogicSize = CGSize(width: 80, height: 80)
-        movableAnalogic = GMAnalogControl(analogSize: analogicSize, bigTexture: SKTexture(imageNamed: "arrow"), smallTexture: SKTexture(imageNamed: "arrow"))
-        movableAnalogic.position = CGPoint(x: size.width * 0.1, y: size.height * 0.1)
+        self.hudLayer = HudLayer(size: size)
+        self.backgroundLayer = BackgroundLayer(size: size)
 
         super.init(size: size)
 
-        movableAnalogic.delegate = self
+        hudLayer.delegate = self
         physicsWorld.gravity = .zero
         addChild(gameLayer)
-        addChild(movableAnalogic)
+        addChild(backgroundLayer)
+
+        backgroundLayer.position = CGPoint(x: size.width/2, y: size.height/2)
+        backgroundLayer.zPosition = -1
+
+        setupCamera()
+        self.camera?.addChild(hudLayer)
+//        self.camera?.addChild(backgroundLayer)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - DidMove
-    override func didMove(to view: SKView) {
-        super.didMove(to: view)
-    }
-
     // MARK: - Update
     override func update(_ currentTime: TimeInterval) {
         gameLayer.update(currentTime)
     }
+
+    override func didMove(to view: SKView) {
+        super.didMove(to: view)
+    }
 }
 
 extension GameScene {
-
-
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        movableAnalogic.touchesBegan(touches, with: event)
-    }
-
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        movableAnalogic.touchesEnded(touches, with: event)
-    }
-
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        movableAnalogic.touchesCancelled(touches, with: event)
-    }
-
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        movableAnalogic.touchesMoved(touches, with: event)
+    func setupCamera() {
+        let camera = SKCameraNode()
+        camera.constraints = [.distance(.init(upperLimit: 10), to: gameLayer.sun)]
+        addChild(camera)
+        self.camera = camera
     }
 }
 
-extension GameScene: GMAnalogDelegate {
-    func analogDataUpdated(analogicData: AnalogData) {
-        gameLayer.moveSun(analogicData: analogicData)
+extension GameScene: HudLayerDelegate {
+    func joystickMoved(_ velocity: CGPoint) {
+        self.gameLayer.moveSun(velocity: velocity)
     }
 }

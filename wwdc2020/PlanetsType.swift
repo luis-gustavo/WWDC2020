@@ -12,12 +12,14 @@ enum PlanetsType {
     case sun
     case star
     case planet
+    case background
 
     var radius: CGFloat {
         switch self {
         case .sun: return 30
         case .star: return 5
         case .planet: return 15
+        case .background: fatalError("This doest not make any sense")
         }
     }
 
@@ -25,6 +27,7 @@ enum PlanetsType {
         switch self {
         case .sun: return 0x0
         case .star, .planet: return 0x1
+        case .background: return 0x2
         }
     }
 }

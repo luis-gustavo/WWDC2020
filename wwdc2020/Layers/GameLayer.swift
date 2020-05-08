@@ -32,6 +32,28 @@ final class GameLayer: SKNode {
         stars.forEach({ $0.position = CGPoint(x: CGFloat.random(in: 0...size.width), y: CGFloat.random(in: 0...size.height)) })
         stars.forEach({ addChild($0) })
         stars.forEach({ $0.constraints = [SKConstraint.distance(SKRange(lowerLimit: 30), to: sun)] })
+
+        NotificationCenter.default.addObserver(self, selector: #selector(sunPositionDidChange(_:)), name: .sunPositionChanged, object: nil)
+    }
+
+    @objc private func sunPositionDidChange(_ notification: Notification) {
+        guard let position = notification.userInfo?["position"] as? CGPoint else {
+            fatalError("There must exist a value of type \(type(of: CGPoint.self))")
+        }
+
+        stars.forEach({ star in
+            guard !star.isActive else { return }
+            let starPosition = convert(star.position, to: self)
+            let sunPosition = convert(position, to: self)
+            let distance = CGPoint.distanceBetweenPoints(starPosition, sunPosition)
+            if distance <= 100 {
+                star.isActive = true
+            }
+        })
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: .sunPositionChanged, object: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -64,8 +86,8 @@ final class GameLayer: SKNode {
 }
 
 extension GameLayer {
-    func moveSun(analogicData: AnalogData) {
-        sun.position.x += (analogicData.velocity.x)
-        sun.position.y += (analogicData.velocity.y)
+    func moveSun(velocity: CGPoint) {
+        sun.position.x += velocity.x
+        sun.position.y += velocity.y
     }
 }
