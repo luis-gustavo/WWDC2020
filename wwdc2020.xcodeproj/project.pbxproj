@@ -13,6 +13,13 @@
 		6E8D329B24657A460048CCF1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E8D329924657A460048CCF1 /* Main.storyboard */; };
 		6E8D329D24657A480048CCF1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E8D329C24657A480048CCF1 /* Assets.xcassets */; };
 		6E8D32A024657A480048CCF1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E8D329E24657A480048CCF1 /* LaunchScreen.storyboard */; };
+		6E8D32A924658EEB0048CCF1 /* SunNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8D32A824658EEB0048CCF1 /* SunNode.swift */; };
+		6E8D32AB24658F530048CCF1 /* PlanetsType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8D32AA24658F530048CCF1 /* PlanetsType.swift */; };
+		6E8D32AD246593730048CCF1 /* GameLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8D32AC246593730048CCF1 /* GameLayer.swift */; };
+		6E8D32AF246594330048CCF1 /* StarNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8D32AE246594330048CCF1 /* StarNode.swift */; };
+		6E8D32B524659E0E0048CCF1 /* GMAnalogControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8D32B224659E0E0048CCF1 /* GMAnalogControl.swift */; };
+		6E8D32B624659E0E0048CCF1 /* GMBigStickNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8D32B324659E0E0048CCF1 /* GMBigStickNode.swift */; };
+		6E8D32B724659E0E0048CCF1 /* GMMovableAnalogicControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8D32B424659E0E0048CCF1 /* GMMovableAnalogicControl.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +31,13 @@
 		6E8D329C24657A480048CCF1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6E8D329F24657A480048CCF1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6E8D32A124657A480048CCF1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6E8D32A824658EEB0048CCF1 /* SunNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SunNode.swift; sourceTree = "<group>"; };
+		6E8D32AA24658F530048CCF1 /* PlanetsType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanetsType.swift; sourceTree = "<group>"; };
+		6E8D32AC246593730048CCF1 /* GameLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameLayer.swift; sourceTree = "<group>"; };
+		6E8D32AE246594330048CCF1 /* StarNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarNode.swift; sourceTree = "<group>"; };
+		6E8D32B224659E0E0048CCF1 /* GMAnalogControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GMAnalogControl.swift; sourceTree = "<group>"; };
+		6E8D32B324659E0E0048CCF1 /* GMBigStickNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GMBigStickNode.swift; sourceTree = "<group>"; };
+		6E8D32B424659E0E0048CCF1 /* GMMovableAnalogicControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GMMovableAnalogicControl.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,8 +70,13 @@
 		6E8D328E24657A460048CCF1 /* wwdc2020 */ = {
 			isa = PBXGroup;
 			children = (
+				6E8D32BA24659F350048CCF1 /* Layers */,
+				6E8D32B024659E070048CCF1 /* Analog */,
 				6E8D32A724657A540048CCF1 /* Core */,
 				6E8D329524657A460048CCF1 /* GameScene.swift */,
+				6E8D32A824658EEB0048CCF1 /* SunNode.swift */,
+				6E8D32AA24658F530048CCF1 /* PlanetsType.swift */,
+				6E8D32AE246594330048CCF1 /* StarNode.swift */,
 			);
 			path = wwdc2020;
 			sourceTree = "<group>";
@@ -73,6 +92,24 @@
 				6E8D328F24657A460048CCF1 /* AppDelegate.swift */,
 			);
 			path = Core;
+			sourceTree = "<group>";
+		};
+		6E8D32B024659E070048CCF1 /* Analog */ = {
+			isa = PBXGroup;
+			children = (
+				6E8D32B224659E0E0048CCF1 /* GMAnalogControl.swift */,
+				6E8D32B324659E0E0048CCF1 /* GMBigStickNode.swift */,
+				6E8D32B424659E0E0048CCF1 /* GMMovableAnalogicControl.swift */,
+			);
+			path = Analog;
+			sourceTree = "<group>";
+		};
+		6E8D32BA24659F350048CCF1 /* Layers */ = {
+			isa = PBXGroup;
+			children = (
+				6E8D32AC246593730048CCF1 /* GameLayer.swift */,
+			);
+			path = Layers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -146,9 +183,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6E8D32AF246594330048CCF1 /* StarNode.swift in Sources */,
+				6E8D32A924658EEB0048CCF1 /* SunNode.swift in Sources */,
+				6E8D32B624659E0E0048CCF1 /* GMBigStickNode.swift in Sources */,
+				6E8D32AD246593730048CCF1 /* GameLayer.swift in Sources */,
+				6E8D32B724659E0E0048CCF1 /* GMMovableAnalogicControl.swift in Sources */,
 				6E8D329624657A460048CCF1 /* GameScene.swift in Sources */,
+				6E8D32AB24658F530048CCF1 /* PlanetsType.swift in Sources */,
 				6E8D329824657A460048CCF1 /* GameViewController.swift in Sources */,
 				6E8D329024657A460048CCF1 /* AppDelegate.swift in Sources */,
+				6E8D32B524659E0E0048CCF1 /* GMAnalogControl.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

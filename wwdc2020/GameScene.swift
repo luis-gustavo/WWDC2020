@@ -9,52 +9,25 @@
 import SpriteKit
 import GameplayKit
 
-enum PhysicsCategory: UInt32 {
-    case none = 0x0
-    case sun = 0x1
-    case others = 0x2
-}
+final class GameScene: SKScene {
 
-class GameScene: SKScene {
-
-    let shapeNode1: SKShapeNode
-    let shapeNode2: SKShapeNode
-    let gravityField: SKFieldNode
-    var lp: CGPoint?
+    // MARK: - Properties
+    let gameLayer: GameLayer
+    let movableAnalogic: GMAnalogControl
 
     // MARK: - Inits
     override init(size: CGSize) {
-        shapeNode1 = SKShapeNode(circleOfRadius: 10)
-        shapeNode2 = SKShapeNode(circleOfRadius: 5)
-//        gravityField = SKFieldNode.linearGravityField(withVector: vector_float3(0, -1, 0))
-        gravityField = SKFieldNode.radialGravityField()
-        gravityField.falloff = 0.0
-        gravityField.strength = 2
-//        gravityField.strength = 9.8
-
+        self.gameLayer = GameLayer(size: size)
+        let analogicSize = CGSize(width: 80, height: 80)
+        movableAnalogic = GMAnalogControl(analogSize: analogicSize, bigTexture: SKTexture(imageNamed: "arrow"), smallTexture: SKTexture(imageNamed: "arrow"))
+        movableAnalogic.position = CGPoint(x: size.width * 0.1, y: size.height * 0.1)
 
         super.init(size: size)
 
+        movableAnalogic.delegate = self
         physicsWorld.gravity = .zero
-        shapeNode1.fillColor = .blue
-        shapeNode1.position = CGPoint(x: size.width/2, y: size.height/2)
-//        shapeNode1.physicsBody = SKPhysicsBody(circleOfRadius: 10)
-//        shapeNode1.physicsBody?.affectedByGravity = false
-//        shapeNode1.physicsBody?.fieldBitMask = PhysicsCategory.sun.rawValue
-
-        shapeNode2.fillColor = .red
-        shapeNode2.position = CGPoint(x: shapeNode1.position.x + 30, y: shapeNode1.position.y + 30)
-        shapeNode2.physicsBody = SKPhysicsBody(circleOfRadius: 5)
-        shapeNode2.physicsBody?.affectedByGravity = false
-        shapeNode2.physicsBody?.fieldBitMask = PhysicsCategory.others.rawValue
-//        shapeNode2.physicsBody?.mass = 0
-
-        gravityField.categoryBitMask = PhysicsCategory.others.rawValue
-
-        addChild(shapeNode1)
-        addChild(shapeNode2)
-        shapeNode1.addChild(gravityField)
-
+        addChild(gameLayer)
+        addChild(movableAnalogic)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -66,34 +39,34 @@ class GameScene: SKScene {
         super.didMove(to: view)
     }
 
+    // MARK: - Update
+    override func update(_ currentTime: TimeInterval) {
+        gameLayer.update(currentTime)
+    }
+}
+
+extension GameScene {
+
+
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesBegan(touches, with: event)
-
-        let touch = touches.first!
-        let location = touch.location(in: self)
-        let moveAction = SKAction.move(to: location, duration: 1.0)
-        shapeNode1.run(moveAction)
-
+        movableAnalogic.touchesBegan(touches, with: event)
     }
 
-    override func update(_ currentTime: TimeInterval) {
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        movableAnalogic.touchesEnded(touches, with: event)
+    }
 
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        movableAnalogic.touchesCancelled(touches, with: event)
+    }
 
-        if let lastPosition = lp {
-            let path = CGMutablePath()
-            path.move(to: lastPosition)
-            path.addLine(to: shapeNode2.position)
-            let lineSegment = SKShapeNode(path: path)
-            lineSegment.strokeColor = shapeNode2.fillColor
-            lineSegment.fillColor = shapeNode2.fillColor
-            addChild(lineSegment)
-            let fadeOut = SKAction.fadeOut(withDuration: 2.5)
-            let remove = SKAction.removeFromParent()
-            let sequence = SKAction.sequence([fadeOut, remove])
-            lineSegment.run(sequence)
-        }
-        lp = shapeNode2.position
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        movableAnalogic.touchesMoved(touches, with: event)
+    }
+}
 
-//        planet.lastPosition = planet.node.position
+extension GameScene: GMAnalogDelegate {
+    func analogDataUpdated(analogicData: AnalogData) {
+        gameLayer.moveSun(analogicData: analogicData)
     }
 }
