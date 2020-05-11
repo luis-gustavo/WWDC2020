@@ -12,23 +12,26 @@ class StarNode: SKShapeNode {
 
     // MARK: - Properties
     var lightNode = SKLightNode()
-    var removed = false
 
     func setup() {
-        fillColor = .orange
-        lightNode.falloff = 4
+        fillColor = .white
+        lightNode.falloff = 4.5
         lightNode.position = .zero
-        lightNode.lightColor = .orange
+        lightNode.lightColor = .white
         lightNode.categoryBitMask = PlanetsType.background.fieldMask
         addChild(lightNode)
+
+        blinkForeverAction()
     }
 
-    func contactWithSunDidHappen() {
-        NotificationCenter.default.post(name: .collisionWithStar, object: nil)
-        removed = true
-        let fadeOut = SKAction.fadeOut(withDuration: 0.3)
-        self.run(fadeOut) { [weak self] in
-            self?.removeFromParent()
-        }
+    private func blinkForeverAction() {
+        let blinkDuration = TimeInterval.random(in: 0.5 ... 1.0)
+        let fadeOutAction = SKAction.fadeOut(withDuration: blinkDuration)
+        let wait = SKAction.wait(forDuration: TimeInterval.random(in: 0.5 ... 2.0))
+        let fadeInAction = SKAction.fadeIn(withDuration: blinkDuration)
+        let longWait = SKAction.wait(forDuration: TimeInterval.random(in: 2.5 ... 4.0))
+        let sequence = SKAction.sequence([longWait, fadeOutAction, wait, fadeInAction, longWait])
+        let repeatForever = SKAction.repeatForever(sequence)
+        run(repeatForever)
     }
 }

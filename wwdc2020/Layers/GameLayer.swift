@@ -19,7 +19,6 @@ final class GameLayer: SKNode {
     var planets = [Planet]()
     var shortStartDelay: TimeInterval = 1.0
     var nodeAngularDistance: [CGFloat] = [0, 0, 0, 0, 0, 0, 0, 0]
-    var stars = [StarNode]()
     var blackHoles = [BlackHoleNode]()
 
     // MARK: - Inits
@@ -77,12 +76,11 @@ final class GameLayer: SKNode {
         }
 
         // Stars
-        for _ in 1...10 {
+        for _ in 1...50 {
             let star = StarNode(circleOfRadius: PlanetsType.star.radius)
-            star.position = CGPoint(x: backgroundFrame.minX /*CGFloat.random(in: 0...size.width)*/, y: CGFloat.random(in: 0...size.height))
+            star.position = CGPoint(x: CGFloat.random(in: backgroundFrame.minX ... backgroundFrame.maxX), y: CGFloat.random(in: backgroundFrame.minY ... backgroundFrame.maxY))
             star.setup()
             addChild(star)
-            stars.append(star)
         }
 
         // Observers
@@ -133,17 +131,6 @@ final class GameLayer: SKNode {
     @objc private func sunPositionDidChange(_ notification: Notification) {
         guard let position = notification.userInfo?["position"] as? CGPoint else {
             fatalError("There must exist a value of type \(type(of: CGPoint.self))")
-        }
-
-        for index in 0 ..< stars.count {
-            let star = stars[index]
-            guard !star.removed else { continue }
-            let starPosition = convert(star.position, to: self)
-            let sunPosition = convert(position, to: self)
-            let distance = CGPoint.distanceBetweenPoints(starPosition, sunPosition)
-            if distance <= 30 {
-                star.contactWithSunDidHappen()
-            }
         }
 
         for planet in planets {

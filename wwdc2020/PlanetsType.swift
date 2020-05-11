@@ -20,7 +20,7 @@ enum PlanetsType {
         case .sun: return 30
         case .shootingStar: return 5
         case .planet: return 15
-        case .star: return 7
+        case .star: return 1
         case .background: fatalError("This doest not make any sense")
         }
     }
