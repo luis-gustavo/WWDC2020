@@ -10,4 +10,5 @@ import Foundation
 
 extension Notification.Name {
     static let sunPositionChanged = Notification.Name("sunPositionChanged")
+    static let audioDidFinish = Notification.Name("audioDidFinish")
 }

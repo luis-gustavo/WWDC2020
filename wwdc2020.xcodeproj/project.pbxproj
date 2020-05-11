@@ -16,14 +16,38 @@
 		6E8D32A924658EEB0048CCF1 /* SunNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8D32A824658EEB0048CCF1 /* SunNode.swift */; };
 		6E8D32AB24658F530048CCF1 /* PlanetsType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8D32AA24658F530048CCF1 /* PlanetsType.swift */; };
 		6E8D32AD246593730048CCF1 /* GameLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8D32AC246593730048CCF1 /* GameLayer.swift */; };
-		6E8D32AF246594330048CCF1 /* StarNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8D32AE246594330048CCF1 /* StarNode.swift */; };
+		6E8D32AF246594330048CCF1 /* ShootingStarNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8D32AE246594330048CCF1 /* ShootingStarNode.swift */; };
 		6E8D32C52465C2AF0048CCF1 /* NotificationName+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8D32C42465C2AF0048CCF1 /* NotificationName+Extension.swift */; };
 		6E8D32C72465C5D10048CCF1 /* CGPoint+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8D32C62465C5D10048CCF1 /* CGPoint+Extension.swift */; };
 		6E8D32C92465CE640048CCF1 /* TLAnalogJoystick.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8D32C82465CE640048CCF1 /* TLAnalogJoystick.swift */; };
 		6E8D32CB2465D3840048CCF1 /* HudLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8D32CA2465D3840048CCF1 /* HudLayer.swift */; };
-		6E8D32D22465DD590048CCF1 /* loop.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6E8D32CF2465DD590048CCF1 /* loop.wav */; };
-		6E8D32D32465DD5A0048CCF1 /* loopTwo.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6E8D32D02465DD590048CCF1 /* loopTwo.wav */; };
 		6E8D32D6246603A30048CCF1 /* BackgroundLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8D32D5246603A30048CCF1 /* BackgroundLayer.swift */; };
+		6EE7282124696B1600C11CFC /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE7282024696B1600C11CFC /* Test.swift */; };
+		6EE7283924696B5500C11CFC /* BigSawBass2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6EE7282224696B5300C11CFC /* BigSawBass2.mp3 */; };
+		6EE7283A24696B5500C11CFC /* HeavySynthBass3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6EE7282324696B5300C11CFC /* HeavySynthBass3.mp3 */; };
+		6EE7283B24696B5500C11CFC /* JumpUpBass1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6EE7282424696B5300C11CFC /* JumpUpBass1.mp3 */; };
+		6EE7283C24696B5500C11CFC /* JumpUpBass3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6EE7282524696B5300C11CFC /* JumpUpBass3.mp3 */; };
+		6EE7283D24696B5500C11CFC /* ClassicElectricPiano1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6EE7282624696B5300C11CFC /* ClassicElectricPiano1.mp3 */; };
+		6EE7283E24696B5500C11CFC /* BigSawBass4.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6EE7282724696B5300C11CFC /* BigSawBass4.mp3 */; };
+		6EE7283F24696B5500C11CFC /* HeavySynthBass7.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6EE7282824696B5300C11CFC /* HeavySynthBass7.mp3 */; };
+		6EE7284024696B5500C11CFC /* HeavySynthBass2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6EE7282924696B5300C11CFC /* HeavySynthBass2.mp3 */; };
+		6EE7284124696B5500C11CFC /* TauregMoonBass4.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6EE7282A24696B5400C11CFC /* TauregMoonBass4.mp3 */; };
+		6EE7284224696B5500C11CFC /* HeavySynthBass1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6EE7282B24696B5400C11CFC /* HeavySynthBass1.mp3 */; };
+		6EE7284324696B5500C11CFC /* HeavySynthBass5.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6EE7282C24696B5400C11CFC /* HeavySynthBass5.mp3 */; };
+		6EE7284424696B5500C11CFC /* TauregMoonBass2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6EE7282D24696B5400C11CFC /* TauregMoonBass2.mp3 */; };
+		6EE7284524696B5500C11CFC /* HeavySynthBass8.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6EE7282E24696B5400C11CFC /* HeavySynthBass8.mp3 */; };
+		6EE7284624696B5500C11CFC /* HeavySynthBass6.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6EE7282F24696B5400C11CFC /* HeavySynthBass6.mp3 */; };
+		6EE7284724696B5500C11CFC /* ClassicElectricPiano3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6EE7283024696B5400C11CFC /* ClassicElectricPiano3.mp3 */; };
+		6EE7284824696B5500C11CFC /* BigSawBass1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6EE7283124696B5400C11CFC /* BigSawBass1.mp3 */; };
+		6EE7284924696B5500C11CFC /* ClassicElectricPiano4.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6EE7283224696B5500C11CFC /* ClassicElectricPiano4.mp3 */; };
+		6EE7284A24696B5500C11CFC /* BigSawBass3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6EE7283324696B5500C11CFC /* BigSawBass3.mp3 */; };
+		6EE7284B24696B5500C11CFC /* JumpUpBass2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6EE7283424696B5500C11CFC /* JumpUpBass2.mp3 */; };
+		6EE7284C24696B5500C11CFC /* TauregMoonBass3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6EE7283524696B5500C11CFC /* TauregMoonBass3.mp3 */; };
+		6EE7284D24696B5500C11CFC /* HeavySynthBass4.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6EE7283624696B5500C11CFC /* HeavySynthBass4.mp3 */; };
+		6EE7284E24696B5500C11CFC /* TauregMoonBass1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6EE7283724696B5500C11CFC /* TauregMoonBass1.mp3 */; };
+		6EE7284F24696B5500C11CFC /* ClassicElectricPiano2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6EE7283824696B5500C11CFC /* ClassicElectricPiano2.mp3 */; };
+		6EE728532469884E00C11CFC /* Planet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE728522469884E00C11CFC /* Planet.swift */; };
+		6EE7285524699C8700C11CFC /* StarNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE7285424699C8700C11CFC /* StarNode.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,14 +62,38 @@
 		6E8D32A824658EEB0048CCF1 /* SunNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SunNode.swift; sourceTree = "<group>"; };
 		6E8D32AA24658F530048CCF1 /* PlanetsType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanetsType.swift; sourceTree = "<group>"; };
 		6E8D32AC246593730048CCF1 /* GameLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameLayer.swift; sourceTree = "<group>"; };
-		6E8D32AE246594330048CCF1 /* StarNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarNode.swift; sourceTree = "<group>"; };
+		6E8D32AE246594330048CCF1 /* ShootingStarNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShootingStarNode.swift; sourceTree = "<group>"; };
 		6E8D32C42465C2AF0048CCF1 /* NotificationName+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationName+Extension.swift"; sourceTree = "<group>"; };
 		6E8D32C62465C5D10048CCF1 /* CGPoint+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGPoint+Extension.swift"; sourceTree = "<group>"; };
 		6E8D32C82465CE640048CCF1 /* TLAnalogJoystick.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TLAnalogJoystick.swift; sourceTree = "<group>"; };
 		6E8D32CA2465D3840048CCF1 /* HudLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HudLayer.swift; sourceTree = "<group>"; };
-		6E8D32CF2465DD590048CCF1 /* loop.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = loop.wav; sourceTree = "<group>"; };
-		6E8D32D02465DD590048CCF1 /* loopTwo.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = loopTwo.wav; sourceTree = "<group>"; };
 		6E8D32D5246603A30048CCF1 /* BackgroundLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundLayer.swift; sourceTree = "<group>"; };
+		6EE7282024696B1600C11CFC /* Test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test.swift; sourceTree = "<group>"; };
+		6EE7282224696B5300C11CFC /* BigSawBass2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = BigSawBass2.mp3; sourceTree = "<group>"; };
+		6EE7282324696B5300C11CFC /* HeavySynthBass3.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = HeavySynthBass3.mp3; sourceTree = "<group>"; };
+		6EE7282424696B5300C11CFC /* JumpUpBass1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = JumpUpBass1.mp3; sourceTree = "<group>"; };
+		6EE7282524696B5300C11CFC /* JumpUpBass3.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = JumpUpBass3.mp3; sourceTree = "<group>"; };
+		6EE7282624696B5300C11CFC /* ClassicElectricPiano1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ClassicElectricPiano1.mp3; sourceTree = "<group>"; };
+		6EE7282724696B5300C11CFC /* BigSawBass4.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = BigSawBass4.mp3; sourceTree = "<group>"; };
+		6EE7282824696B5300C11CFC /* HeavySynthBass7.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = HeavySynthBass7.mp3; sourceTree = "<group>"; };
+		6EE7282924696B5300C11CFC /* HeavySynthBass2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = HeavySynthBass2.mp3; sourceTree = "<group>"; };
+		6EE7282A24696B5400C11CFC /* TauregMoonBass4.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = TauregMoonBass4.mp3; sourceTree = "<group>"; };
+		6EE7282B24696B5400C11CFC /* HeavySynthBass1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = HeavySynthBass1.mp3; sourceTree = "<group>"; };
+		6EE7282C24696B5400C11CFC /* HeavySynthBass5.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = HeavySynthBass5.mp3; sourceTree = "<group>"; };
+		6EE7282D24696B5400C11CFC /* TauregMoonBass2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = TauregMoonBass2.mp3; sourceTree = "<group>"; };
+		6EE7282E24696B5400C11CFC /* HeavySynthBass8.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = HeavySynthBass8.mp3; sourceTree = "<group>"; };
+		6EE7282F24696B5400C11CFC /* HeavySynthBass6.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = HeavySynthBass6.mp3; sourceTree = "<group>"; };
+		6EE7283024696B5400C11CFC /* ClassicElectricPiano3.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ClassicElectricPiano3.mp3; sourceTree = "<group>"; };
+		6EE7283124696B5400C11CFC /* BigSawBass1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = BigSawBass1.mp3; sourceTree = "<group>"; };
+		6EE7283224696B5500C11CFC /* ClassicElectricPiano4.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ClassicElectricPiano4.mp3; sourceTree = "<group>"; };
+		6EE7283324696B5500C11CFC /* BigSawBass3.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = BigSawBass3.mp3; sourceTree = "<group>"; };
+		6EE7283424696B5500C11CFC /* JumpUpBass2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = JumpUpBass2.mp3; sourceTree = "<group>"; };
+		6EE7283524696B5500C11CFC /* TauregMoonBass3.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = TauregMoonBass3.mp3; sourceTree = "<group>"; };
+		6EE7283624696B5500C11CFC /* HeavySynthBass4.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = HeavySynthBass4.mp3; sourceTree = "<group>"; };
+		6EE7283724696B5500C11CFC /* TauregMoonBass1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = TauregMoonBass1.mp3; sourceTree = "<group>"; };
+		6EE7283824696B5500C11CFC /* ClassicElectricPiano2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ClassicElectricPiano2.mp3; sourceTree = "<group>"; };
+		6EE728522469884E00C11CFC /* Planet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Planet.swift; sourceTree = "<group>"; };
+		6EE7285424699C8700C11CFC /* StarNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarNode.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +134,7 @@
 				6E8D32A724657A540048CCF1 /* Core */,
 				6E8D329524657A460048CCF1 /* GameScene.swift */,
 				6E8D32AA24658F530048CCF1 /* PlanetsType.swift */,
+				6EE7282024696B1600C11CFC /* Test.swift */,
 			);
 			path = wwdc2020;
 			sourceTree = "<group>";
@@ -124,8 +173,10 @@
 		6E8D32BB2465C1310048CCF1 /* Nodes */ = {
 			isa = PBXGroup;
 			children = (
-				6E8D32AE246594330048CCF1 /* StarNode.swift */,
+				6E8D32AE246594330048CCF1 /* ShootingStarNode.swift */,
 				6E8D32A824658EEB0048CCF1 /* SunNode.swift */,
+				6EE728522469884E00C11CFC /* Planet.swift */,
+				6EE7285424699C8700C11CFC /* StarNode.swift */,
 			);
 			path = Nodes;
 			sourceTree = "<group>";
@@ -142,8 +193,29 @@
 		6E8D32CC2465D8F20048CCF1 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
-				6E8D32CF2465DD590048CCF1 /* loop.wav */,
-				6E8D32D02465DD590048CCF1 /* loopTwo.wav */,
+				6EE7283124696B5400C11CFC /* BigSawBass1.mp3 */,
+				6EE7282224696B5300C11CFC /* BigSawBass2.mp3 */,
+				6EE7283324696B5500C11CFC /* BigSawBass3.mp3 */,
+				6EE7282724696B5300C11CFC /* BigSawBass4.mp3 */,
+				6EE7282624696B5300C11CFC /* ClassicElectricPiano1.mp3 */,
+				6EE7283824696B5500C11CFC /* ClassicElectricPiano2.mp3 */,
+				6EE7283024696B5400C11CFC /* ClassicElectricPiano3.mp3 */,
+				6EE7283224696B5500C11CFC /* ClassicElectricPiano4.mp3 */,
+				6EE7282B24696B5400C11CFC /* HeavySynthBass1.mp3 */,
+				6EE7282924696B5300C11CFC /* HeavySynthBass2.mp3 */,
+				6EE7282324696B5300C11CFC /* HeavySynthBass3.mp3 */,
+				6EE7283624696B5500C11CFC /* HeavySynthBass4.mp3 */,
+				6EE7282C24696B5400C11CFC /* HeavySynthBass5.mp3 */,
+				6EE7282F24696B5400C11CFC /* HeavySynthBass6.mp3 */,
+				6EE7282824696B5300C11CFC /* HeavySynthBass7.mp3 */,
+				6EE7282E24696B5400C11CFC /* HeavySynthBass8.mp3 */,
+				6EE7282424696B5300C11CFC /* JumpUpBass1.mp3 */,
+				6EE7283424696B5500C11CFC /* JumpUpBass2.mp3 */,
+				6EE7282524696B5300C11CFC /* JumpUpBass3.mp3 */,
+				6EE7283724696B5500C11CFC /* TauregMoonBass1.mp3 */,
+				6EE7282D24696B5400C11CFC /* TauregMoonBass2.mp3 */,
+				6EE7283524696B5500C11CFC /* TauregMoonBass3.mp3 */,
+				6EE7282A24696B5400C11CFC /* TauregMoonBass4.mp3 */,
 			);
 			path = Sounds;
 			sourceTree = "<group>";
@@ -206,11 +278,32 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6E8D32D22465DD590048CCF1 /* loop.wav in Resources */,
+				6EE7284224696B5500C11CFC /* HeavySynthBass1.mp3 in Resources */,
+				6EE7284F24696B5500C11CFC /* ClassicElectricPiano2.mp3 in Resources */,
+				6EE7283A24696B5500C11CFC /* HeavySynthBass3.mp3 in Resources */,
+				6EE7283E24696B5500C11CFC /* BigSawBass4.mp3 in Resources */,
 				6E8D329B24657A460048CCF1 /* Main.storyboard in Resources */,
+				6EE7283C24696B5500C11CFC /* JumpUpBass3.mp3 in Resources */,
+				6EE7284524696B5500C11CFC /* HeavySynthBass8.mp3 in Resources */,
+				6EE7284C24696B5500C11CFC /* TauregMoonBass3.mp3 in Resources */,
+				6EE7284824696B5500C11CFC /* BigSawBass1.mp3 in Resources */,
+				6EE7284924696B5500C11CFC /* ClassicElectricPiano4.mp3 in Resources */,
+				6EE7284D24696B5500C11CFC /* HeavySynthBass4.mp3 in Resources */,
+				6EE7284724696B5500C11CFC /* ClassicElectricPiano3.mp3 in Resources */,
+				6EE7283B24696B5500C11CFC /* JumpUpBass1.mp3 in Resources */,
+				6EE7284A24696B5500C11CFC /* BigSawBass3.mp3 in Resources */,
+				6EE7283D24696B5500C11CFC /* ClassicElectricPiano1.mp3 in Resources */,
+				6EE7284E24696B5500C11CFC /* TauregMoonBass1.mp3 in Resources */,
+				6EE7284024696B5500C11CFC /* HeavySynthBass2.mp3 in Resources */,
+				6EE7284424696B5500C11CFC /* TauregMoonBass2.mp3 in Resources */,
+				6EE7283F24696B5500C11CFC /* HeavySynthBass7.mp3 in Resources */,
+				6EE7283924696B5500C11CFC /* BigSawBass2.mp3 in Resources */,
+				6EE7284324696B5500C11CFC /* HeavySynthBass5.mp3 in Resources */,
+				6EE7284624696B5500C11CFC /* HeavySynthBass6.mp3 in Resources */,
 				6E8D329D24657A480048CCF1 /* Assets.xcassets in Resources */,
-				6E8D32D32465DD5A0048CCF1 /* loopTwo.wav in Resources */,
+				6EE7284B24696B5500C11CFC /* JumpUpBass2.mp3 in Resources */,
 				6E8D32A024657A480048CCF1 /* LaunchScreen.storyboard in Resources */,
+				6EE7284124696B5500C11CFC /* TauregMoonBass4.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -221,16 +314,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6E8D32AF246594330048CCF1 /* StarNode.swift in Sources */,
+				6E8D32AF246594330048CCF1 /* ShootingStarNode.swift in Sources */,
 				6E8D32D6246603A30048CCF1 /* BackgroundLayer.swift in Sources */,
 				6E8D32A924658EEB0048CCF1 /* SunNode.swift in Sources */,
 				6E8D32C72465C5D10048CCF1 /* CGPoint+Extension.swift in Sources */,
 				6E8D32AD246593730048CCF1 /* GameLayer.swift in Sources */,
 				6E8D32CB2465D3840048CCF1 /* HudLayer.swift in Sources */,
+				6EE7282124696B1600C11CFC /* Test.swift in Sources */,
 				6E8D329624657A460048CCF1 /* GameScene.swift in Sources */,
 				6E8D32C52465C2AF0048CCF1 /* NotificationName+Extension.swift in Sources */,
 				6E8D32AB24658F530048CCF1 /* PlanetsType.swift in Sources */,
 				6E8D329824657A460048CCF1 /* GameViewController.swift in Sources */,
+				6EE7285524699C8700C11CFC /* StarNode.swift in Sources */,
+				6EE728532469884E00C11CFC /* Planet.swift in Sources */,
 				6E8D32C92465CE640048CCF1 /* TLAnalogJoystick.swift in Sources */,
 				6E8D329024657A460048CCF1 /* AppDelegate.swift in Sources */,
 			);

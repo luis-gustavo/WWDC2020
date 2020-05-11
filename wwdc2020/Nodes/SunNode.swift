@@ -14,8 +14,7 @@ final class SunNode: SKShapeNode {
     // MARK: - Properties
     var gravityField: SKFieldNode!
     var lightNode = SKLightNode()
-
-    lazy var player: AVAudioPlayer? = try? AVAudioPlayer(contentsOf: Bundle.main.url(forResource: "loop", withExtension: "wav")!)
+    var player: AVAudioPlayer?
 
     override var position: CGPoint {
         didSet {
@@ -24,9 +23,10 @@ final class SunNode: SKShapeNode {
     }
 
     func setup() {
-        player?.numberOfLoops = -1
+        player = try? AVAudioPlayer(contentsOf: Bundle.main.url(forResource: "ClassicElectricPiano4", withExtension: "mp3")!)
+        player?.delegate = self
+//        player?.numberOfLoops = -1
         player?.prepareToPlay()
-        player?.play()
 
         physicsBody = SKPhysicsBody(circleOfRadius: PlanetsType.sun.radius)
         physicsBody?.affectedByGravity = false
@@ -38,14 +38,14 @@ final class SunNode: SKShapeNode {
         // Setup gravity field
         gravityField.falloff = 0
         gravityField.strength = 2
-        gravityField.categoryBitMask = PlanetsType.star.fieldMask
+        gravityField.categoryBitMask = PlanetsType.shootingStar.fieldMask
         addChild(gravityField)
 
         // SKLight node
         lightNode.falloff = 2
         lightNode.position = .zero
-        lightNode.lightColor = .white
-        lightNode.categoryBitMask = PlanetsType.background.fieldMask | PlanetsType.planet.fieldMask | PlanetsType.star.fieldMask | PlanetsType.sun.fieldMask
+        lightNode.lightColor = .yellow
+        lightNode.categoryBitMask = PlanetsType.background.fieldMask | PlanetsType.planet.fieldMask | PlanetsType.shootingStar.fieldMask | PlanetsType.sun.fieldMask
         addChild(lightNode)
     }
 
@@ -53,4 +53,8 @@ final class SunNode: SKShapeNode {
 
 extension SunNode: AVAudioPlayerDelegate {
 
+    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+
+        NotificationCenter.default.post(name: .audioDidFinish, object: nil)
+    }
 }
