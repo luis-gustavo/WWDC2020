@@ -21,7 +21,7 @@ final class BackgroundLayer: SKNode {
         super.init()
 
         addChild(background)
-        background.size = CGSize(width: size.width * 15, height: size.height * 15)
+        background.size = CGSize(width: size.width * 2, height: size.height * 2)
         background.lightingBitMask = PlanetsType.background.fieldMask
     }
 

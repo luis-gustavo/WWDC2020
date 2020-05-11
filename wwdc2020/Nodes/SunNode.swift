@@ -12,9 +12,7 @@ import AVFoundation
 final class SunNode: SKShapeNode {
 
     // MARK: - Properties
-    var gravityField: SKFieldNode!
     var lightNode = SKLightNode()
-    var player: AVAudioPlayer?
 
     override var position: CGPoint {
         didSet {
@@ -22,39 +20,40 @@ final class SunNode: SKShapeNode {
         }
     }
 
-    func setup() {
-        player = try? AVAudioPlayer(contentsOf: Bundle.main.url(forResource: "ClassicElectricPiano4", withExtension: "mp3")!)
-        player?.delegate = self
-//        player?.numberOfLoops = -1
-        player?.prepareToPlay()
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: .collisionWithStar, object: nil)
+    }
 
+
+    func setup() {
         physicsBody = SKPhysicsBody(circleOfRadius: PlanetsType.sun.radius)
         physicsBody?.affectedByGravity = false
         physicsBody?.fieldBitMask = PlanetsType.sun.fieldMask
 
-        gravityField = SKFieldNode.radialGravityField()
         fillColor = .yellow
 
-        // Setup gravity field
-        gravityField.falloff = 0
-        gravityField.strength = 2
-        gravityField.categoryBitMask = PlanetsType.shootingStar.fieldMask
-        addChild(gravityField)
-
         // SKLight node
-        lightNode.falloff = 2
+        lightNode.falloff = 1.0//3.0
         lightNode.position = .zero
         lightNode.lightColor = .yellow
-        lightNode.categoryBitMask = PlanetsType.background.fieldMask | PlanetsType.planet.fieldMask | PlanetsType.shootingStar.fieldMask | PlanetsType.sun.fieldMask
+        lightNode.categoryBitMask = PlanetsType.background.fieldMask
         addChild(lightNode)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(collisionWithStar(_:)), name: .collisionWithStar, object: nil)
+
+//        Timer.scheduledTimer(withTimeInterval: 2.5, repeats: true) { [weak self] _ in
+//            guard let self = self else { return }
+//            self.lightNode.falloff += 0.1
+//            print(self.lightNode.falloff)
+//            NotificationCenter.default.post(name: .sunlightDecayed, object: nil, userInfo: ["falloff": self.lightNode.falloff])
+//        }
     }
 
-}
-
-extension SunNode: AVAudioPlayerDelegate {
-
-    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-
-        NotificationCenter.default.post(name: .audioDidFinish, object: nil)
+    @objc private func collisionWithStar(_ notification: Notification) {
+        let applier: CGFloat = 0.3
+        lightNode.falloff = lightNode.falloff - applier <= 0.1 ? 1.0 : lightNode.falloff - applier
+        print(lightNode.falloff)
+        NotificationCenter.default.post(name: .sunlightDecayed, object: nil, userInfo: ["falloff": self.lightNode.falloff])
     }
+
 }

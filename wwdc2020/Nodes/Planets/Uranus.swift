@@ -1,5 +1,5 @@
 //
-//  Planet.swift
+//  Uranus.swift
 //  wwdc2020
 //
 //  Created by Luis Gustavo Avelino de Lima Jacinto on 11/05/20.
@@ -7,39 +7,32 @@
 //
 
 import SpriteKit
-import AVFoundation
 
-class PlanetNode: SKShapeNode {
+class Uranus: SKShapeNode, Planet {
+    var removed: Bool = false
+    var orbitRadius: CGPoint = CGPoint(x: 300, y: 300)
+    var period: CGFloat = 5
 
-    // MARK: - Properties
-    var isActive = false {
+    var isActive: Bool = false {
         didSet {
             changeState(active: isActive)
         }
     }
-    var lightNode = SKLightNode()
-    var player: AVAudioPlayer?
 
-    func setup(_ musicName: String) {
-        player = try? AVAudioPlayer(contentsOf: Bundle.main.url(forResource: musicName, withExtension: "mp3")!)
-        player?.prepareToPlay()
-        fillColor = .gray
-    }
+    var lightNode: SKLightNode = SKLightNode()
 
-    private func changeState(active: Bool) {
+    func changeState(active: Bool) {
         if active {
             fillColor = .green
             physicsBody = SKPhysicsBody(circleOfRadius: PlanetsType.planet.radius)
             physicsBody?.affectedByGravity = false
             physicsBody?.fieldBitMask = PlanetsType.planet.fieldMask
-            player?.volume = 1
-
 
             // SKLight node
             lightNode.falloff = 3
             lightNode.position = .zero
             lightNode.lightColor = .green
-            lightNode.categoryBitMask = PlanetsType.background.fieldMask | PlanetsType.planet.fieldMask | PlanetsType.shootingStar.fieldMask | PlanetsType.sun.fieldMask
+            lightNode.categoryBitMask = PlanetsType.background.fieldMask
             addChild(lightNode)
         } else {
             physicsBody = nil

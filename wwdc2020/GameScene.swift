@@ -18,9 +18,9 @@ final class GameScene: SKScene {
     
     // MARK: - Inits
     override init(size: CGSize) {
-        self.gameLayer = GameLayer(size: size)
         self.hudLayer = HudLayer(size: size)
         self.backgroundLayer = BackgroundLayer(size: size)
+        self.gameLayer = GameLayer(size: size, backgroundFrame: self.backgroundLayer.background.frame)
 
         super.init(size: size)
 
@@ -29,12 +29,12 @@ final class GameScene: SKScene {
         addChild(gameLayer)
         addChild(backgroundLayer)
 
-        backgroundLayer.position = CGPoint(x: size.width/2, y: size.height/2)
         backgroundLayer.zPosition = -1
 
         setupCamera()
         self.camera?.addChild(hudLayer)
-//        self.camera?.addChild(backgroundLayer)
+
+        SoundManager.shared.start()
     }
 
     required init?(coder aDecoder: NSCoder) {
