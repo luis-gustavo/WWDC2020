@@ -19,7 +19,7 @@
 		6E8D32AF246594330048CCF1 /* ShootingStarNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8D32AE246594330048CCF1 /* ShootingStarNode.swift */; };
 		6E8D32C52465C2AF0048CCF1 /* NotificationName+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8D32C42465C2AF0048CCF1 /* NotificationName+Extension.swift */; };
 		6E8D32C72465C5D10048CCF1 /* CGPoint+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8D32C62465C5D10048CCF1 /* CGPoint+Extension.swift */; };
-		6E8D32C92465CE640048CCF1 /* TLAnalogJoystick.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8D32C82465CE640048CCF1 /* TLAnalogJoystick.swift */; };
+		6E8D32C92465CE640048CCF1 /* Joystick.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8D32C82465CE640048CCF1 /* Joystick.swift */; };
 		6E8D32CB2465D3840048CCF1 /* HudLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8D32CA2465D3840048CCF1 /* HudLayer.swift */; };
 		6E8D32D6246603A30048CCF1 /* BackgroundLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8D32D5246603A30048CCF1 /* BackgroundLayer.swift */; };
 		6EE728532469884E00C11CFC /* Planet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE728522469884E00C11CFC /* Planet.swift */; };
@@ -41,6 +41,7 @@
 		6EE728762469D3A800C11CFC /* Mercury.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE728752469D3A800C11CFC /* Mercury.swift */; };
 		6EE728782469E32600C11CFC /* SKAction+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE728772469E32600C11CFC /* SKAction+Extension.swift */; };
 		6EE7287A2469E53A00C11CFC /* BlackHoleNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE728792469E53A00C11CFC /* BlackHoleNode.swift */; };
+		6EE7287C246A215600C11CFC /* Component.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE7287B246A215600C11CFC /* Component.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,7 +59,7 @@
 		6E8D32AE246594330048CCF1 /* ShootingStarNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShootingStarNode.swift; sourceTree = "<group>"; };
 		6E8D32C42465C2AF0048CCF1 /* NotificationName+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationName+Extension.swift"; sourceTree = "<group>"; };
 		6E8D32C62465C5D10048CCF1 /* CGPoint+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGPoint+Extension.swift"; sourceTree = "<group>"; };
-		6E8D32C82465CE640048CCF1 /* TLAnalogJoystick.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TLAnalogJoystick.swift; sourceTree = "<group>"; };
+		6E8D32C82465CE640048CCF1 /* Joystick.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Joystick.swift; sourceTree = "<group>"; };
 		6E8D32CA2465D3840048CCF1 /* HudLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HudLayer.swift; sourceTree = "<group>"; };
 		6E8D32D5246603A30048CCF1 /* BackgroundLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundLayer.swift; sourceTree = "<group>"; };
 		6EE728522469884E00C11CFC /* Planet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Planet.swift; sourceTree = "<group>"; };
@@ -80,6 +81,7 @@
 		6EE728752469D3A800C11CFC /* Mercury.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mercury.swift; sourceTree = "<group>"; };
 		6EE728772469E32600C11CFC /* SKAction+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SKAction+Extension.swift"; sourceTree = "<group>"; };
 		6EE728792469E53A00C11CFC /* BlackHoleNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlackHoleNode.swift; sourceTree = "<group>"; };
+		6EE7287B246A215600C11CFC /* Component.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Component.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,7 +143,8 @@
 		6E8D32B024659E070048CCF1 /* Joystick */ = {
 			isa = PBXGroup;
 			children = (
-				6E8D32C82465CE640048CCF1 /* TLAnalogJoystick.swift */,
+				6E8D32C82465CE640048CCF1 /* Joystick.swift */,
+				6EE7287B246A215600C11CFC /* Component.swift */,
 			);
 			path = Joystick;
 			sourceTree = "<group>";
@@ -311,11 +314,12 @@
 				6E8D32C52465C2AF0048CCF1 /* NotificationName+Extension.swift in Sources */,
 				6E8D32AB24658F530048CCF1 /* PlanetsType.swift in Sources */,
 				6EE728742469D35400C11CFC /* Neptune.swift in Sources */,
+				6EE7287C246A215600C11CFC /* Component.swift in Sources */,
 				6E8D329824657A460048CCF1 /* GameViewController.swift in Sources */,
 				6EE728702469D30400C11CFC /* Venus.swift in Sources */,
 				6EE7285524699C8700C11CFC /* StarNode.swift in Sources */,
 				6EE728532469884E00C11CFC /* Planet.swift in Sources */,
-				6E8D32C92465CE640048CCF1 /* TLAnalogJoystick.swift in Sources */,
+				6E8D32C92465CE640048CCF1 /* Joystick.swift in Sources */,
 				6E8D329024657A460048CCF1 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -463,6 +467,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A93689JNSR;
 				INFOPLIST_FILE = wwdc2020/Core/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -481,6 +486,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A93689JNSR;
 				INFOPLIST_FILE = wwdc2020/Core/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

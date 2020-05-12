@@ -10,7 +10,7 @@ import SpriteKit
 
 class Venus: SKShapeNode, Planet {
     var removed: Bool = false
-    var orbitRadius: CGPoint = CGPoint(x: 200, y: 200)
+    var orbitRadius: CGPoint = CGPoint(x: 320, y: 320)
     var period: CGFloat = 4
 
     var isActive: Bool = false {

@@ -23,6 +23,7 @@ final class SunNode: SKShapeNode {
     func setup() {
         physicsBody = SKPhysicsBody(circleOfRadius: PlanetsType.sun.radius)
         physicsBody?.affectedByGravity = false
+        physicsBody?.isDynamic = false
         physicsBody?.fieldBitMask = PlanetsType.sun.fieldMask
 
         fillColor = .yellow

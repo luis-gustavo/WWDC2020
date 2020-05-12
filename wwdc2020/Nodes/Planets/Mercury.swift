@@ -11,7 +11,7 @@ import SpriteKit
 class Mercury: SKShapeNode, Planet {
     var removed: Bool = false
     var orbitRadius: CGPoint = CGPoint(x: 500, y: 500)
-    var period: CGFloat = 6
+    var period: CGFloat = 4
 
     var isActive: Bool = false {
         didSet {

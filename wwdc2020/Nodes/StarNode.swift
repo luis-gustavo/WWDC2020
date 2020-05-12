@@ -11,15 +11,9 @@ import SpriteKit
 class StarNode: SKShapeNode {
 
     // MARK: - Properties
-    var lightNode = SKLightNode()
 
     func setup() {
         fillColor = .white
-        lightNode.falloff = 4.5
-        lightNode.position = .zero
-        lightNode.lightColor = .white
-        lightNode.categoryBitMask = PlanetsType.background.fieldMask
-        addChild(lightNode)
 
         blinkForeverAction()
     }

@@ -10,7 +10,7 @@ import SpriteKit
 
 class Saturn: SKShapeNode, Planet {
     var removed: Bool = false
-    var orbitRadius: CGPoint = CGPoint(x: 100, y: 100)
+    var orbitRadius: CGPoint = CGPoint(x: 140, y: 140)
     var period: CGFloat = 2
 
     var isActive: Bool = false {

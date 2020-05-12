@@ -10,7 +10,7 @@ import SpriteKit
 
 class Uranus: SKShapeNode, Planet {
     var removed: Bool = false
-    var orbitRadius: CGPoint = CGPoint(x: 300, y: 300)
+    var orbitRadius: CGPoint = CGPoint(x: 380, y: 380)
     var period: CGFloat = 5
 
     var isActive: Bool = false {

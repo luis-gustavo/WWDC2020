@@ -10,7 +10,7 @@ import SpriteKit
 
 class Earth: SKShapeNode, Planet {
     var removed: Bool = false
-    var orbitRadius: CGPoint = CGPoint(x: 200, y: 150)
+    var orbitRadius: CGPoint = CGPoint(x: 260, y: 260)
     var period: CGFloat = 3
 
     var isActive: Bool = false {

@@ -16,13 +16,13 @@ final class HudLayer: SKNode {
 
     // MARK: - Properties
     let size: CGSize
-    let joystick: TLAnalogJoystick
+    let joystick: Joystick
     var delegate: HudLayerDelegate?
 
     // MARK: - Inits
     init(size: CGSize) {
         self.size = size
-        joystick = TLAnalogJoystick(withDiameter: 80)
+        joystick = Joystick(withDiameter: 80)
         joystick.position = CGPoint(x: -size.width/2 + size.width * 0.1, y: -size.height/2 + size.height * 0.1)
 
         super.init()

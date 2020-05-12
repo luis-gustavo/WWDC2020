@@ -10,7 +10,7 @@ import SpriteKit
 
 class Mars: SKShapeNode, Planet {
     var removed: Bool = false
-    var orbitRadius: CGPoint = CGPoint(x: 60, y: 60)
+    var orbitRadius: CGPoint = CGPoint(x: 80, y: 80)
     var period: CGFloat = 1
 
     var isActive: Bool = false {

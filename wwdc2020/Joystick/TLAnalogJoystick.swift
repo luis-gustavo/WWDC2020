@@ -8,8 +8,7 @@
 
 import SpriteKit
 
-public typealias 🕹 = TLAnalogJoystick
-public typealias TLAnalogJoystickEventHandler = (TLAnalogJoystick) -> Void
+public typealias TLAnalogJoystickEventHandler = (Joystick) -> Void
 public typealias TLAnalogJoystickHandlerID = String
 public typealias TLAnalogJoystickEventHandlers = [TLAnalogJoystickHandlerID: TLAnalogJoystickEventHandler]
 
@@ -34,9 +33,9 @@ fileprivate func getDiameter(fromDiameter diameter: CGFloat, withRatio ratio: CG
 
 // MARK: - TLAnalogJoystickHiddenArea
 open class TLAnalogJoystickHiddenArea: SKShapeNode {
-    private var currJoystick: TLAnalogJoystick?
+    private var currJoystick: Joystick?
 
-    var joystick: TLAnalogJoystick? {
+    var joystick: Joystick? {
         get {
             return currJoystick
         }
@@ -193,7 +192,7 @@ open class TLAnalogJoystickComponent: SKSpriteNode {
 }
 
 //MARK: - TLAnalogJoystick
-open class TLAnalogJoystick: SKNode {
+open class Joystick: SKNode {
     public var isMoveable = false
     public let handle: TLAnalogJoystickComponent
     public let base: TLAnalogJoystickComponent

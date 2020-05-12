@@ -10,7 +10,7 @@ import SpriteKit
 
 class Neptune: SKShapeNode, Planet {
     var removed: Bool = false
-    var orbitRadius: CGPoint = CGPoint(x: 350, y: 350)
+    var orbitRadius: CGPoint = CGPoint(x: 440, y: 440)
     var period: CGFloat = 5
 
     var isActive: Bool = false {

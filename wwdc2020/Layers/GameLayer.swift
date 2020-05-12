@@ -60,18 +60,17 @@ final class GameLayer: SKNode {
         // Add child
         addChild(sun)
         planets.forEach({ addChild($0) })
-        blackHoles.forEach({ addChild($0) })
+//        blackHoles.forEach({ addChild($0) })
 
         // Black holes
-        self.blackHoles.forEach { blackHole in
-            blackHole.position = CGPoint(x: CGFloat.random(in: backgroundFrame.minX...backgroundFrame.maxX), y: CGFloat.random(in: backgroundFrame.minY...backgroundFrame.maxY))
-            blackHole.fillColor = .red
-        }
+//        self.blackHoles.forEach { blackHole in
+//            blackHole.position = CGPoint(x: CGFloat.random(in: backgroundFrame.minX...backgroundFrame.maxX), y: CGFloat.random(in: backgroundFrame.minY...backgroundFrame.maxY))
+//            blackHole.fillColor = .red
+//        }
 
         // Planets
         self.planets.forEach { planet in
             planet.position = CGPoint(x: CGFloat.random(in: backgroundFrame.minX...backgroundFrame.maxX), y: CGFloat.random(in: backgroundFrame.minY...backgroundFrame.maxY))
-            planet.constraints = [SKConstraint.distance(SKRange(lowerLimit: 30), to: sun)]
             planet.setup()
         }
 
@@ -99,23 +98,26 @@ final class GameLayer: SKNode {
     }
 
     func setupShootingStar() {
-        let coordinates: [(initial: CGPoint, final: (CGPoint))] = [
+        let firstCoordinates: [(initial: CGPoint, final: (CGPoint))] = [
             (CGPoint(x: backgroundFrame.minX, y: backgroundFrame.minY), (CGPoint(x: backgroundFrame.maxX, y: backgroundFrame.maxY))),
             (CGPoint(x: backgroundFrame.minX, y: backgroundFrame.maxY), (CGPoint(x: backgroundFrame.maxX, y: backgroundFrame.minY))),
             (CGPoint(x: backgroundFrame.minX, y: backgroundFrame.midY), (CGPoint(x: backgroundFrame.maxX, y: backgroundFrame.midY))),
             (CGPoint(x: backgroundFrame.minX, y: backgroundFrame.midY), (CGPoint(x: backgroundFrame.maxX, y: backgroundFrame.maxY))),
             (CGPoint(x: backgroundFrame.minX, y: backgroundFrame.midY), (CGPoint(x: backgroundFrame.maxX, y: backgroundFrame.minY))),
             (CGPoint(x: backgroundFrame.minX + (backgroundFrame.maxX - backgroundFrame.minX) * 0.3, y: backgroundFrame.maxY), (CGPoint(x: backgroundFrame.maxX, y: backgroundFrame.minY))),
-            (CGPoint(x: backgroundFrame.minX + (backgroundFrame.maxX - backgroundFrame.minX) * 0.3, y: backgroundFrame.minY), (CGPoint(x: backgroundFrame.maxX, y: backgroundFrame.maxY))),
+            (CGPoint(x: backgroundFrame.minX + (backgroundFrame.maxX - backgroundFrame.minX) * 0.3, y: backgroundFrame.minY), (CGPoint(x: backgroundFrame.maxX, y: backgroundFrame.maxY)))
+            ]
+        let secondCoordinates: [(initial: CGPoint, final: (CGPoint))] = [
             (CGPoint(x: backgroundFrame.maxX, y: backgroundFrame.minY), (CGPoint(x: backgroundFrame.minX, y: backgroundFrame.maxY))),
             (CGPoint(x: backgroundFrame.maxX, y: backgroundFrame.maxY), (CGPoint(x: backgroundFrame.minX, y: backgroundFrame.minY))),
             (CGPoint(x: backgroundFrame.maxX, y: backgroundFrame.midY), (CGPoint(x: backgroundFrame.minX, y: backgroundFrame.minY))),
-            (CGPoint(x: backgroundFrame.maxX, y: backgroundFrame.midY), (CGPoint(x: backgroundFrame.minX, y: backgroundFrame.maxY))),
-            ]
+            (CGPoint(x: backgroundFrame.maxX, y: backgroundFrame.midY), (CGPoint(x: backgroundFrame.minX, y: backgroundFrame.maxY)))
+        ]
 
-        shootingStars.forEach({ shootingStar in
+        for index in 0 ..< shootingStars.count {
+            let shootingStar = shootingStars[index]
             shootingStar.alpha = 1
-            let coordinate = coordinates.randomElement()!
+            let coordinate = index.isMultiple(of: 2) ? secondCoordinates.randomElement()!: firstCoordinates.randomElement()!
             shootingStar.position = coordinate.initial
             let moveAction = SKAction.move(to: coordinate.final, duration: 5.0)
             let run = SKAction.run {
@@ -124,8 +126,7 @@ final class GameLayer: SKNode {
             let fadeOut = SKAction.fadeOut(withDuration: 1.5)
             let sequence = SKAction.sequence([moveAction, fadeOut, run])
             shootingStar.run(sequence)
-        })
-
+        }
     }
 
     @objc private func sunPositionDidChange(_ notification: Notification) {
@@ -138,9 +139,12 @@ final class GameLayer: SKNode {
             let planetPosition = convert(planet.position, to: self)
             let sunPosition = convert(position, to: self)
             let distance = CGPoint.distanceBetweenPoints(planetPosition, sunPosition)
-            if distance <= 100 {
+            if sun.intersects(planet) {
                 planet.isActive = true
             }
+//            if distance <= 100 {
+//                planet.isActive = true
+//            }
         }
     }
 
@@ -177,9 +181,9 @@ final class GameLayer: SKNode {
             let planet = planets[index]
             guard planet.isActive, !planet.removed else { continue }
             let dt: CGFloat = 1.0/60.0
-            let period: CGFloat = planet.period//3
+            let period: CGFloat = planet.period
             let orbitPosition = convert(sun.position, to: self)
-            let orbitRadius = planet.orbitRadius//CGPoint(x: 100, y: 150)
+            let orbitRadius = planet.orbitRadius
             var node2AngularDistance = nodeAngularDistance[index]
 
             let normal = CGVector(dx:orbitPosition.x + CGFloat(cos(node2AngularDistance))*orbitRadius.x ,dy:orbitPosition.y + CGFloat(sin(node2AngularDistance))*orbitRadius.y);
@@ -195,17 +199,16 @@ final class GameLayer: SKNode {
             nodeAngularDistance[index] = node2AngularDistance
         }
 
-        blackHoles.forEach { (blackHole) in
-            for index in 0 ..< planets.count {
-                let planet = planets[index]
-                guard !planet.removed else { continue }
-                if blackHole.intersects(planet) {
-                    planet.removed = true
-                    blackHole.suckPlanet(planet)
-                }
-            }
-
-        }
+//        blackHoles.forEach { (blackHole) in
+//            for index in 0 ..< planets.count {
+//                let planet = planets[index]
+//                guard !planet.removed else { continue }
+//                if blackHole.intersects(planet) {
+//                    planet.removed = true
+//                    blackHole.suckPlanet(planet)
+//                }
+//            }
+//        }
 
     }
 }
