@@ -20,7 +20,7 @@ final class BackgroundLayer: SKNode {
         self.size = size
 
         // Shooting Stars
-        self.shootingStars = [ShootingStarNode(circleOfRadius: PlanetType.shootingStar.radius),                   ShootingStarNode(circleOfRadius: PlanetType.shootingStar.radius)]
+        self.shootingStars = [ ShootingStarNode(circleOfRadius: 3), ShootingStarNode(circleOfRadius: 3)]
         shootingStars.forEach({ shootingStar in
             shootingStar.setup()
         })
@@ -44,7 +44,7 @@ final class BackgroundLayer: SKNode {
         // Shooting Star
         shootingStars.forEach({ addChild($0) })
         self.setupShootingStar()
-        Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { [weak self] _ in
+        Timer.scheduledTimer(withTimeInterval: 15.0, repeats: true) { [weak self] _ in
             self?.setupShootingStar()
         }
     }

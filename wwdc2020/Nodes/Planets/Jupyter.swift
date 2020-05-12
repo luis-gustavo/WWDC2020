@@ -8,30 +8,41 @@
 
 import SpriteKit
 
-class Jupyter: SKShapeNode, Planet {
+class Jupyter: SKSpriteNode, Planet {
+    var sprite: SKTexture = SKTexture(imageNamed: "Jupyter")
+    var lightColor: UIColor = UIColor(red: 163/255, green: 143/255, blue: 127/255, alpha: 1.0)
     var removed: Bool = false
     var orbitRadius: CGPoint = CGPoint(x: 200, y: 200)
     var period: CGFloat = 3
-
     var isActive: Bool = false {
         didSet {
             changeState(active: isActive)
         }
     }
-
     var lightNode: SKLightNode = SKLightNode()
+
+    // MARK: - Inits
+    init() {
+        super.init(texture: sprite, color: .clear, size: sprite.size())
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     func changeState(active: Bool) {
         if active {
-            fillColor = .purple
+            color = .clear
+            colorBlendFactor = 0
             physicsBody = SKPhysicsBody(circleOfRadius: PlanetType.planet.radius)
             physicsBody?.affectedByGravity = false
             physicsBody?.fieldBitMask = PlanetType.planet.fieldMask
+            physicsBody?.allowsRotation = false
 
             // SKLight node
-            lightNode.falloff = 3
+            lightNode.falloff = 2.5
             lightNode.position = .zero
-            lightNode.lightColor = .purple
+            lightNode.lightColor = lightColor
             lightNode.categoryBitMask = PlanetType.background.fieldMask
             addChild(lightNode)
         } else {

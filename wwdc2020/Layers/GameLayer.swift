@@ -29,7 +29,7 @@ final class GameLayer: SKNode {
         self.backgroundFrame = backgroundFrame
 
         // Sun
-        self.sun = SunNode(circleOfRadius: PlanetType.sun.radius)
+        self.sun = SunNode()
         sun.position = CGPoint(x: size.width/2, y: size.height/2)
         self.sun.setup()
 
@@ -39,14 +39,14 @@ final class GameLayer: SKNode {
                            BlackHoleNode(circleOfRadius: 10)]
 
         // Planets
-        self.planets = [Mars(circleOfRadius: PlanetType.planet.radius),
-                        Saturn(circleOfRadius: PlanetType.planet.radius),
-                        Jupyter(circleOfRadius: PlanetType.planet.radius),
-                        Earth(circleOfRadius: PlanetType.planet.radius),
-                        Venus(circleOfRadius: PlanetType.planet.radius),
-                        Uranus(circleOfRadius: PlanetType.planet.radius),
-                        Neptune(circleOfRadius: PlanetType.planet.radius),
-                        Mercury(circleOfRadius: PlanetType.planet.radius)]
+        self.planets = [Mars(),
+                        Saturn(),
+                        Jupyter(),
+                        Earth(),
+                        Venus(),
+                        Uranus(),
+                        Neptune(),
+                        Mercury()]
 
         // Asteroid
         self.asteroid = Asteroid(circleOfRadius: PlanetType.asteroid.radius)
@@ -59,7 +59,7 @@ final class GameLayer: SKNode {
         addChild(sun)
         planets.forEach({ addChild($0) })
         blackHoles.forEach({ addChild($0) })
-        addChild(asteroid)
+//        addChild(asteroid)
 
         // Black holes
         self.blackHoles.forEach { blackHole in
@@ -77,10 +77,10 @@ final class GameLayer: SKNode {
         setupObservers()
 
         // Asteroid
-        setupAsteroid()
-        Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { [weak self] _ in
-            self?.setupAsteroid()
-        }
+//        setupAsteroid()
+//        Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { [weak self] _ in
+//            self?.setupAsteroid()
+//        }
     }
 
     func setupAsteroid() {
@@ -112,6 +112,7 @@ final class GameLayer: SKNode {
             guard !planet.isActive, !planet.removed else { continue }
             if sun.intersects(planet) {
                 planet.isActive = true
+                sun.addOrbitPath(orbitRadius: planet.orbitRadius)
             }
         }
     }
@@ -155,6 +156,7 @@ final class GameLayer: SKNode {
                 if blackHole.intersects(planet) {
                     planet.removed = true
                     blackHole.suckPlanet(planet)
+                    sun.removeOrbitPath(orbitRadius: planet.orbitRadius)
                 }
             }
         }

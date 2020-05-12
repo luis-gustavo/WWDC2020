@@ -8,30 +8,41 @@
 
 import SpriteKit
 
-class Mercury: SKShapeNode, Planet {
+class Mercury: SKSpriteNode, Planet {
+    var sprite: SKTexture = SKTexture(imageNamed: "Mercury")
+    var lightColor: UIColor = UIColor(red: 251/255, green: 174/255, blue: 140/255, alpha: 1.0)
     var removed: Bool = false
     var orbitRadius: CGPoint = CGPoint(x: 500, y: 500)
     var period: CGFloat = 4
-
     var isActive: Bool = false {
         didSet {
             changeState(active: isActive)
         }
     }
-
     var lightNode: SKLightNode = SKLightNode()
+
+    // MARK: - Inits
+    init() {
+        super.init(texture: sprite, color: .clear, size: sprite.size())
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     func changeState(active: Bool) {
         if active {
-            fillColor = .systemIndigo
+            color = .clear
+            colorBlendFactor = 0
             physicsBody = SKPhysicsBody(circleOfRadius: PlanetType.planet.radius)
             physicsBody?.affectedByGravity = false
             physicsBody?.fieldBitMask = PlanetType.planet.fieldMask
+            physicsBody?.allowsRotation = false
 
             // SKLight node
-            lightNode.falloff = 3
+            lightNode.falloff = 2.5
             lightNode.position = .zero
-            lightNode.lightColor = .systemIndigo
+            lightNode.lightColor = lightColor
             lightNode.categoryBitMask = PlanetType.background.fieldMask
             addChild(lightNode)
         } else {

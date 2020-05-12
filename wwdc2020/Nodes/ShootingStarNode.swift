@@ -18,7 +18,6 @@ final class ShootingStarNode: SKShapeNode {
 
     func setup() {
         fillColor = .white
-        strokeColor = .white
         lightNode.falloff = 3
         lightNode.position = .zero
         lightNode.lightColor = .white

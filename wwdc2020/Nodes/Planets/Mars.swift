@@ -8,7 +8,9 @@
 
 import SpriteKit
 
-class Mars: SKShapeNode, Planet {
+class Mars: SKSpriteNode, Planet {
+    var sprite: SKTexture = SKTexture(imageNamed: "Mars")
+    var lightColor: UIColor = UIColor(red: 229/255, green: 80/255, blue: 24/255, alpha: 1.0)
     var removed: Bool = false
     var orbitRadius: CGPoint = CGPoint(x: 80, y: 80)
     var period: CGFloat = 1
@@ -18,20 +20,30 @@ class Mars: SKShapeNode, Planet {
             changeState(active: isActive)
         }
     }
-
     var lightNode: SKLightNode = SKLightNode()
+
+    // MARK: - Inits
+    init() {
+        super.init(texture: sprite, color: .clear, size: sprite.size())
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     func changeState(active: Bool) {
         if active {
-            fillColor = .red
+            color = .clear
+            colorBlendFactor = 0
             physicsBody = SKPhysicsBody(circleOfRadius: PlanetType.planet.radius)
             physicsBody?.affectedByGravity = false
             physicsBody?.fieldBitMask = PlanetType.planet.fieldMask
+            physicsBody?.allowsRotation = false
 
             // SKLight node
-            lightNode.falloff = 3
+            lightNode.falloff = 2.5
             lightNode.position = .zero
-            lightNode.lightColor = .red
+            lightNode.lightColor = lightColor//.red
             lightNode.categoryBitMask = PlanetType.background.fieldMask
             addChild(lightNode)
         } else {
