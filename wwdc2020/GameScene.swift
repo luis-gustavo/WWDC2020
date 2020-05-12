@@ -44,6 +44,7 @@ final class GameScene: SKScene {
     // MARK: - Update
     override func update(_ currentTime: TimeInterval) {
         gameLayer.update(currentTime)
+        backgroundLayer.update(currentTime)
     }
 
     override func didMove(to view: SKView) {

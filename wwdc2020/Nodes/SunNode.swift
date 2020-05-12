@@ -21,10 +21,10 @@ final class SunNode: SKShapeNode {
     }
 
     func setup() {
-        physicsBody = SKPhysicsBody(circleOfRadius: PlanetsType.sun.radius)
+        physicsBody = SKPhysicsBody(circleOfRadius: PlanetType.sun.radius)
         physicsBody?.affectedByGravity = false
         physicsBody?.isDynamic = false
-        physicsBody?.fieldBitMask = PlanetsType.sun.fieldMask
+        physicsBody?.fieldBitMask = PlanetType.sun.fieldMask
 
         fillColor = .yellow
 
@@ -32,7 +32,7 @@ final class SunNode: SKShapeNode {
         lightNode.falloff = 2.0//3.0
         lightNode.position = .zero
         lightNode.lightColor = .yellow
-        lightNode.categoryBitMask = PlanetsType.background.fieldMask
+        lightNode.categoryBitMask = PlanetType.background.fieldMask
         addChild(lightNode)
     }
 

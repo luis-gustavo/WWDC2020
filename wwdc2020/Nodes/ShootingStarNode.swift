@@ -22,7 +22,7 @@ final class ShootingStarNode: SKShapeNode {
         lightNode.falloff = 3
         lightNode.position = .zero
         lightNode.lightColor = .white
-        lightNode.categoryBitMask = PlanetsType.background.fieldMask
+        lightNode.categoryBitMask = PlanetType.background.fieldMask
         addChild(lightNode)
     }
 }

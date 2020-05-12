@@ -8,19 +8,21 @@
 
 import SpriteKit
 
-enum PlanetsType {
+enum PlanetType {
     case sun
     case shootingStar
     case planet
     case background
     case star
+    case asteroid
 
     var radius: CGFloat {
         switch self {
         case .sun: return 30
-        case .shootingStar: return 5
+        case .shootingStar: return 3
         case .planet: return 15
         case .star: return 1
+        case .asteroid: return 6
         case .background: fatalError("This doest not make any sense")
         }
     }
@@ -30,7 +32,7 @@ enum PlanetsType {
         case .sun: return 0x1 << 0
         case .background: return 0x1 << 2
         case .planet: return 0x1 << 3
-        case .star, .shootingStar: fatalError("This doest not make any sense")
+        case .star, .shootingStar, .asteroid: fatalError("This doest not make any sense")
         }
     }
 }

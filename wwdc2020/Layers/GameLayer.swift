@@ -15,11 +15,11 @@ final class GameLayer: SKNode {
     let size: CGSize
     let backgroundFrame: CGRect
     let sun: SunNode
-    var shootingStars = [ShootingStarNode]()
     var planets = [Planet]()
     var shortStartDelay: TimeInterval = 1.0
     var nodeAngularDistance: [CGFloat] = [0, 0, 0, 0, 0, 0, 0, 0]
     var blackHoles = [BlackHoleNode]()
+    let asteroid: Asteroid
 
     // MARK: - Inits
     init(size: CGSize, backgroundFrame: CGRect) {
@@ -29,7 +29,7 @@ final class GameLayer: SKNode {
         self.backgroundFrame = backgroundFrame
 
         // Sun
-        self.sun = SunNode(circleOfRadius: PlanetsType.sun.radius)
+        self.sun = SunNode(circleOfRadius: PlanetType.sun.radius)
         sun.position = CGPoint(x: size.width/2, y: size.height/2)
         self.sun.setup()
 
@@ -39,20 +39,18 @@ final class GameLayer: SKNode {
                            BlackHoleNode(circleOfRadius: 10)]
 
         // Planets
-        self.planets = [Mars(circleOfRadius: PlanetsType.planet.radius),
-                        Saturn(circleOfRadius: PlanetsType.planet.radius),
-                        Jupyter(circleOfRadius: PlanetsType.planet.radius),
-                        Earth(circleOfRadius: PlanetsType.planet.radius),
-                        Venus(circleOfRadius: PlanetsType.planet.radius),
-                        Uranus(circleOfRadius: PlanetsType.planet.radius),
-                        Neptune(circleOfRadius: PlanetsType.planet.radius),
-                        Mercury(circleOfRadius: PlanetsType.planet.radius)]
+        self.planets = [Mars(circleOfRadius: PlanetType.planet.radius),
+                        Saturn(circleOfRadius: PlanetType.planet.radius),
+                        Jupyter(circleOfRadius: PlanetType.planet.radius),
+                        Earth(circleOfRadius: PlanetType.planet.radius),
+                        Venus(circleOfRadius: PlanetType.planet.radius),
+                        Uranus(circleOfRadius: PlanetType.planet.radius),
+                        Neptune(circleOfRadius: PlanetType.planet.radius),
+                        Mercury(circleOfRadius: PlanetType.planet.radius)]
 
-        // Shooting Stars
-        self.shootingStars = [ShootingStarNode(circleOfRadius: PlanetsType.shootingStar.radius),                   ShootingStarNode(circleOfRadius: PlanetsType.shootingStar.radius)]
-        shootingStars.forEach({ shootingStar in
-            shootingStar.setup()
-        })
+        // Asteroid
+        self.asteroid = Asteroid(circleOfRadius: PlanetType.asteroid.radius)
+        asteroid.setup()
 
         // Super
         super.init()
@@ -60,13 +58,14 @@ final class GameLayer: SKNode {
         // Add child
         addChild(sun)
         planets.forEach({ addChild($0) })
-//        blackHoles.forEach({ addChild($0) })
+        blackHoles.forEach({ addChild($0) })
+        addChild(asteroid)
 
         // Black holes
-//        self.blackHoles.forEach { blackHole in
-//            blackHole.position = CGPoint(x: CGFloat.random(in: backgroundFrame.minX...backgroundFrame.maxX), y: CGFloat.random(in: backgroundFrame.minY...backgroundFrame.maxY))
-//            blackHole.fillColor = .red
-//        }
+        self.blackHoles.forEach { blackHole in
+            blackHole.position = CGPoint(x: CGFloat.random(in: backgroundFrame.minX...backgroundFrame.maxX), y: CGFloat.random(in: backgroundFrame.minY...backgroundFrame.maxY))
+            blackHole.fillColor = .red
+        }
 
         // Planets
         self.planets.forEach { planet in
@@ -74,31 +73,18 @@ final class GameLayer: SKNode {
             planet.setup()
         }
 
-        // Stars
-        for _ in 1...50 {
-            let star = StarNode(circleOfRadius: PlanetsType.star.radius)
-            star.position = CGPoint(x: CGFloat.random(in: backgroundFrame.minX ... backgroundFrame.maxX), y: CGFloat.random(in: backgroundFrame.minY ... backgroundFrame.maxY))
-            star.setup()
-            addChild(star)
-        }
-
         // Observers
         setupObservers()
 
-        // Shooting Star
-        shootingStars.forEach({ addChild($0) })
-        self.setupShootingStar()
+        // Asteroid
+        setupAsteroid()
         Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { [weak self] _ in
-            self?.setupShootingStar()
+            self?.setupAsteroid()
         }
     }
 
-    func setupObservers() {
-        NotificationCenter.default.addObserver(self, selector: #selector(sunPositionDidChange(_:)), name: .sunPositionChanged, object: nil)
-    }
-
-    func setupShootingStar() {
-        let firstCoordinates: [(initial: CGPoint, final: (CGPoint))] = [
+    func setupAsteroid() {
+        let coordinates: [(initial: CGPoint, final: (CGPoint))] = [
             (CGPoint(x: backgroundFrame.minX, y: backgroundFrame.minY), (CGPoint(x: backgroundFrame.maxX, y: backgroundFrame.maxY))),
             (CGPoint(x: backgroundFrame.minX, y: backgroundFrame.maxY), (CGPoint(x: backgroundFrame.maxX, y: backgroundFrame.minY))),
             (CGPoint(x: backgroundFrame.minX, y: backgroundFrame.midY), (CGPoint(x: backgroundFrame.maxX, y: backgroundFrame.midY))),
@@ -107,44 +93,26 @@ final class GameLayer: SKNode {
             (CGPoint(x: backgroundFrame.minX + (backgroundFrame.maxX - backgroundFrame.minX) * 0.3, y: backgroundFrame.maxY), (CGPoint(x: backgroundFrame.maxX, y: backgroundFrame.minY))),
             (CGPoint(x: backgroundFrame.minX + (backgroundFrame.maxX - backgroundFrame.minX) * 0.3, y: backgroundFrame.minY), (CGPoint(x: backgroundFrame.maxX, y: backgroundFrame.maxY)))
             ]
-        let secondCoordinates: [(initial: CGPoint, final: (CGPoint))] = [
-            (CGPoint(x: backgroundFrame.maxX, y: backgroundFrame.minY), (CGPoint(x: backgroundFrame.minX, y: backgroundFrame.maxY))),
-            (CGPoint(x: backgroundFrame.maxX, y: backgroundFrame.maxY), (CGPoint(x: backgroundFrame.minX, y: backgroundFrame.minY))),
-            (CGPoint(x: backgroundFrame.maxX, y: backgroundFrame.midY), (CGPoint(x: backgroundFrame.minX, y: backgroundFrame.minY))),
-            (CGPoint(x: backgroundFrame.maxX, y: backgroundFrame.midY), (CGPoint(x: backgroundFrame.minX, y: backgroundFrame.maxY)))
-        ]
 
-        for index in 0 ..< shootingStars.count {
-            let shootingStar = shootingStars[index]
-            shootingStar.alpha = 1
-            let coordinate = index.isMultiple(of: 2) ? secondCoordinates.randomElement()!: firstCoordinates.randomElement()!
-            shootingStar.position = coordinate.initial
-            let moveAction = SKAction.move(to: coordinate.final, duration: 5.0)
-            let run = SKAction.run {
-                shootingStar.lastPosition = nil
-            }
-            let fadeOut = SKAction.fadeOut(withDuration: 1.5)
-            let sequence = SKAction.sequence([moveAction, fadeOut, run])
-            shootingStar.run(sequence)
-        }
+        asteroid.alpha = 1
+        let coordinate = coordinates.randomElement()!
+        asteroid.position = coordinate.initial
+        let moveAction = SKAction.move(to: coordinate.final, duration: 5.0)
+        let fadeOut = SKAction.fadeOut(withDuration: 1.5)
+        let sequence = SKAction.sequence([moveAction, fadeOut])
+        asteroid.run(sequence)
+    }
+
+    func setupObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(sunPositionDidChange(_:)), name: .sunPositionChanged, object: nil)
     }
 
     @objc private func sunPositionDidChange(_ notification: Notification) {
-        guard let position = notification.userInfo?["position"] as? CGPoint else {
-            fatalError("There must exist a value of type \(type(of: CGPoint.self))")
-        }
-
         for planet in planets {
             guard !planet.isActive, !planet.removed else { continue }
-            let planetPosition = convert(planet.position, to: self)
-            let sunPosition = convert(position, to: self)
-            let distance = CGPoint.distanceBetweenPoints(planetPosition, sunPosition)
             if sun.intersects(planet) {
                 planet.isActive = true
             }
-//            if distance <= 100 {
-//                planet.isActive = true
-//            }
         }
     }
 
@@ -158,25 +126,6 @@ final class GameLayer: SKNode {
 
     // MARK: - Update
     func update(_ currentTime: TimeInterval) {
-        shootingStars.forEach { shootingStar in
-            if let lastPosition = shootingStar.lastPosition {
-                let lastPositionInSelf = convert(lastPosition, to: self)
-                let positionInSelf = convert(shootingStar.position, to: self)
-                let path = CGMutablePath()
-                path.move(to: lastPositionInSelf)
-                path.addLine(to: positionInSelf)
-                let lineSegment = SKShapeNode(path: path)
-                lineSegment.strokeColor = shootingStar.fillColor
-                lineSegment.fillColor = shootingStar.fillColor
-                addChild(lineSegment)
-                let fadeOut = SKAction.fadeOut(withDuration: shootingStar.lineTrailDuration)
-                let remove = SKAction.removeFromParent()
-                let sequence = SKAction.sequence([fadeOut, remove])
-                lineSegment.run(sequence)
-            }
-            shootingStar.lastPosition = shootingStar.position
-        }
-
         for index in 0 ..< planets.count {
             let planet = planets[index]
             guard planet.isActive, !planet.removed else { continue }
@@ -199,16 +148,16 @@ final class GameLayer: SKNode {
             nodeAngularDistance[index] = node2AngularDistance
         }
 
-//        blackHoles.forEach { (blackHole) in
-//            for index in 0 ..< planets.count {
-//                let planet = planets[index]
-//                guard !planet.removed else { continue }
-//                if blackHole.intersects(planet) {
-//                    planet.removed = true
-//                    blackHole.suckPlanet(planet)
-//                }
-//            }
-//        }
+        blackHoles.forEach { (blackHole) in
+            for index in 0 ..< planets.count {
+                let planet = planets[index]
+                guard !planet.removed else { continue }
+                if blackHole.intersects(planet) {
+                    planet.removed = true
+                    blackHole.suckPlanet(planet)
+                }
+            }
+        }
 
     }
 }

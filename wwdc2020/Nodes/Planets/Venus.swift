@@ -24,15 +24,15 @@ class Venus: SKShapeNode, Planet {
     func changeState(active: Bool) {
         if active {
             fillColor = .cyan
-            physicsBody = SKPhysicsBody(circleOfRadius: PlanetsType.planet.radius)
+            physicsBody = SKPhysicsBody(circleOfRadius: PlanetType.planet.radius)
             physicsBody?.affectedByGravity = false
-            physicsBody?.fieldBitMask = PlanetsType.planet.fieldMask
+            physicsBody?.fieldBitMask = PlanetType.planet.fieldMask
 
             // SKLight node
             lightNode.falloff = 3
             lightNode.position = .zero
             lightNode.lightColor = .cyan
-            lightNode.categoryBitMask = PlanetsType.background.fieldMask
+            lightNode.categoryBitMask = PlanetType.background.fieldMask
             addChild(lightNode)
         } else {
             physicsBody = nil
