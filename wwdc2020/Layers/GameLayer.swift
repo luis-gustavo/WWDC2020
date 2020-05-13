@@ -34,9 +34,9 @@ final class GameLayer: SKNode {
         self.sun.setup()
 
         // Black holes
-        self.blackHoles = [BlackHoleNode(circleOfRadius: 10),
-                           BlackHoleNode(circleOfRadius: 10),
-                           BlackHoleNode(circleOfRadius: 10)]
+        self.blackHoles = [BlackHoleNode(),
+                           BlackHoleNode(),
+                           BlackHoleNode()]
 
         // Planets
         self.planets = [Mars(),
@@ -64,7 +64,6 @@ final class GameLayer: SKNode {
         // Black holes
         self.blackHoles.forEach { blackHole in
             blackHole.position = CGPoint(x: CGFloat.random(in: backgroundFrame.minX...backgroundFrame.maxX), y: CGFloat.random(in: backgroundFrame.minY...backgroundFrame.maxY))
-            blackHole.fillColor = .red
         }
 
         // Planets

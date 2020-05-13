@@ -1,15 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "spark.png",
+      "filename" : "Black Hole.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "Black Hole@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "Black Hole@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

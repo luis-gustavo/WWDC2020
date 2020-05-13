@@ -13,17 +13,15 @@ final class BackgroundLayer: SKNode {
     // MARK: - Properties
     let size: CGSize
     let background = SKSpriteNode(imageNamed: "nebula")
-    var shootingStars = [ShootingStarNode]()
+    let shootingStar: ShootingStarNode
 
     // MARK: - Inits
     init(size: CGSize) {
         self.size = size
 
         // Shooting Stars
-        self.shootingStars = [ ShootingStarNode(circleOfRadius: 3), ShootingStarNode(circleOfRadius: 3)]
-        shootingStars.forEach({ shootingStar in
-            shootingStar.setup()
-        })
+        self.shootingStar = ShootingStarNode(circleOfRadius: 3)
+        self.shootingStar.setup()
 
         super.init()
 
@@ -42,9 +40,9 @@ final class BackgroundLayer: SKNode {
         }
 
         // Shooting Star
-        shootingStars.forEach({ addChild($0) })
+        addChild(shootingStar)
         self.setupShootingStar()
-        Timer.scheduledTimer(withTimeInterval: 15.0, repeats: true) { [weak self] _ in
+        Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { [weak self] _ in
             self?.setupShootingStar()
         }
     }
@@ -54,55 +52,52 @@ final class BackgroundLayer: SKNode {
     }
 
     func setupShootingStar() {
-        let firstCoordinates: [(initial: CGPoint, final: (CGPoint))] = [
+        let coordinates: [(initial: CGPoint, final: (CGPoint))] = [
+            // Left to right
             (CGPoint(x: background.frame.minX, y: background.frame.minY), (CGPoint(x: background.frame.maxX, y: background.frame.maxY))),
             (CGPoint(x: background.frame.minX, y: background.frame.maxY), (CGPoint(x: background.frame.maxX, y: background.frame.minY))),
             (CGPoint(x: background.frame.minX, y: background.frame.midY), (CGPoint(x: background.frame.maxX, y: background.frame.midY))),
             (CGPoint(x: background.frame.minX, y: background.frame.midY), (CGPoint(x: background.frame.maxX, y: background.frame.maxY))),
             (CGPoint(x: background.frame.minX, y: background.frame.midY), (CGPoint(x: background.frame.maxX, y: background.frame.minY))),
             (CGPoint(x: background.frame.minX + (background.frame.maxX - background.frame.minX) * 0.3, y: background.frame.maxY), (CGPoint(x: background.frame.maxX, y: background.frame.minY))),
-            (CGPoint(x: background.frame.minX + (background.frame.maxX - background.frame.minX) * 0.3, y: background.frame.minY), (CGPoint(x: background.frame.maxX, y: background.frame.maxY)))
-            ]
-        let secondCoordinates: [(initial: CGPoint, final: (CGPoint))] = [
+            (CGPoint(x: background.frame.minX + (background.frame.maxX - background.frame.minX) * 0.3, y: background.frame.minY), (CGPoint(x: background.frame.maxX, y: background.frame.maxY))),
+            // Right to left
             (CGPoint(x: background.frame.maxX, y: background.frame.minY), (CGPoint(x: background.frame.minX, y: background.frame.maxY))),
             (CGPoint(x: background.frame.maxX, y: background.frame.maxY), (CGPoint(x: background.frame.minX, y: background.frame.minY))),
             (CGPoint(x: background.frame.maxX, y: background.frame.midY), (CGPoint(x: background.frame.minX, y: background.frame.minY))),
-            (CGPoint(x: background.frame.maxX, y: background.frame.midY), (CGPoint(x: background.frame.minX, y: background.frame.maxY)))
+            (CGPoint(x: background.frame.maxX, y: background.frame.midY), (CGPoint(x: background.frame.minX, y: background.frame.maxY))),
+            (CGPoint(x: background.frame.maxX - ( background.frame.maxX - background.frame.minX) * 0.25, y: background.frame.minY), (CGPoint(x: background.frame.minX, y: background.frame.maxY))),
+            (CGPoint(x: background.frame.maxX - ( background.frame.maxX - background.frame.minX) * 0.25, y: background.frame.maxY), (CGPoint(x: background.frame.minX, y: background.frame.minY)))
         ]
 
-        for index in 0 ..< shootingStars.count {
-            let shootingStar = shootingStars[index]
-            shootingStar.alpha = 1
-            let coordinate = index.isMultiple(of: 2) ? secondCoordinates.randomElement()!: firstCoordinates.randomElement()!
-            shootingStar.position = coordinate.initial
-            let moveAction = SKAction.move(to: coordinate.final, duration: 5.0)
-            let run = SKAction.run {
-                shootingStar.lastPosition = nil
-            }
-            let fadeOut = SKAction.fadeOut(withDuration: 1.5)
-            let sequence = SKAction.sequence([moveAction, fadeOut, run])
-            shootingStar.run(sequence)
+        shootingStar.alpha = 1
+        let coordinate = coordinates.randomElement()!
+        shootingStar.position = coordinate.initial
+        let moveAction = SKAction.move(to: coordinate.final, duration: 5.0)
+        let run = SKAction.run {
+            self.shootingStar.lastPosition = nil
         }
+        let fadeOut = SKAction.fadeOut(withDuration: 1.5)
+        let sequence = SKAction.sequence([moveAction, fadeOut, run])
+        shootingStar.run(sequence)
     }
 
     func update(_ currentTime: TimeInterval) {
-        shootingStars.forEach { shootingStar in
-            if let lastPosition = shootingStar.lastPosition {
-                let lastPositionInSelf = convert(lastPosition, to: self)
-                let positionInSelf = convert(shootingStar.position, to: self)
-                let path = CGMutablePath()
-                path.move(to: lastPositionInSelf)
-                path.addLine(to: positionInSelf)
-                let lineSegment = SKShapeNode(path: path)
-                lineSegment.strokeColor = shootingStar.fillColor
-                lineSegment.fillColor = shootingStar.fillColor
-                addChild(lineSegment)
-                let fadeOut = SKAction.fadeOut(withDuration: shootingStar.lineTrailDuration)
-                let remove = SKAction.removeFromParent()
-                let sequence = SKAction.sequence([fadeOut, remove])
-                lineSegment.run(sequence)
-            }
-            shootingStar.lastPosition = shootingStar.position
+        if let lastPosition = shootingStar.lastPosition {
+            let lastPositionInSelf = convert(lastPosition, to: self)
+            let positionInSelf = convert(shootingStar.position, to: self)
+            let path = CGMutablePath()
+            path.move(to: lastPositionInSelf)
+            path.addLine(to: positionInSelf)
+            let lineSegment = SKShapeNode(path: path)
+            lineSegment.strokeColor = shootingStar.fillColor
+            lineSegment.fillColor = shootingStar.fillColor
+            addChild(lineSegment)
+            let fadeOut = SKAction.fadeOut(withDuration: shootingStar.lineTrailDuration)
+            let remove = SKAction.removeFromParent()
+            let sequence = SKAction.sequence([fadeOut, remove])
+            lineSegment.run(sequence)
         }
+        shootingStar.lastPosition = shootingStar.position
     }
 }

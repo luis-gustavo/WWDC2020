@@ -12,7 +12,5 @@ class Asteroid: SKShapeNode {
 
     func setup() {
         fillColor = .brown
-        let emmiter = SKEmitterNode(fileNamed: "FireParticle")!
-        addChild(emmiter)
     }
 }

@@ -191,9 +191,7 @@ extension Joystick {
     }
 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard isTracking else {
-            return
-        }
+        guard isTracking else { return }
 
         let touch = touches.first!
         let location = touch.location(in: self)

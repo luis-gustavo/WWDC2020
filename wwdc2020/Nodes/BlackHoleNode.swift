@@ -8,8 +8,29 @@
 
 import SpriteKit
 
-class BlackHoleNode: SKShapeNode {
+class BlackHoleNode: SKSpriteNode {
 
+    // MARK: - Properties
+    let sprite = SKTexture(imageNamed: "Black Hole")
+    let lightNode = SKLightNode()
+    let lightColor = UIColor(red: 45/255, green: 21/255, blue: 89/255, alpha: 1.0)
+
+    // MARK: - Inits
+    init() {
+        super.init(texture: sprite, color: .clear, size: sprite.size())
+
+        // SKLight node
+        lightNode.falloff = 1.0
+        lightNode.position = .zero
+        lightNode.lightColor = lightColor
+        lightNode.categoryBitMask = PlanetType.background.fieldMask
+        addChild(lightNode)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     func suckPlanet(_ planet: Planet) {
         planet.removeFromParent()
         addChild(planet)
