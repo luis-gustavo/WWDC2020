@@ -52,6 +52,7 @@ class Uranus: SKSpriteNode, Planet {
             addChild(lightNode)
         } else {
             physicsBody = nil
+            lightNode.removeFromParent()
         }
     }
 }

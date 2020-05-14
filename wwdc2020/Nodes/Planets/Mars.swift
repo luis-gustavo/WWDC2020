@@ -37,7 +37,6 @@ class Mars: SKSpriteNode, Planet {
 
     func changeState(active: Bool) {
         if active {
-            removeAllActions()
             color = .clear
             colorBlendFactor = 0
             physicsBody = SKPhysicsBody(circleOfRadius: PlanetType.planet(.mars).radius)
@@ -53,6 +52,7 @@ class Mars: SKSpriteNode, Planet {
             addChild(lightNode)
         } else {
             physicsBody = nil
+            lightNode.removeFromParent()
         }
     }
 }

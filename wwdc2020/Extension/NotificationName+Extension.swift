@@ -13,4 +13,7 @@ extension Notification.Name {
     static let planetCollected = Notification.Name("planetCollected")
     static let timeEnded = Notification.Name("timeEnded")
     static let planetCollidedWithBlackHole = Notification.Name("planetCollidedWithBlackHole")
+    static let explosionStarted = Notification.Name("explosionStarted")
+    static let explosionEnded = Notification.Name("explosionEnded")
+    static let collectedAllPlanets = Notification.Name("collectedAllPlanets")
 }

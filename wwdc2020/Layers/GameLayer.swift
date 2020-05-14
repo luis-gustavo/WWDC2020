@@ -39,11 +39,6 @@ final class GameLayer: SKNode {
             .positionY(SKRange(lowerLimit: backgroundFrame.minY + sun.size.height / 2))
         ]
 
-        // Black holes
-        self.blackHoles = [BlackHoleNode(),
-                           BlackHoleNode(),
-                           BlackHoleNode()]
-
         // Planets
         self.planets = [Mars(),
                         Saturn(),
@@ -54,15 +49,66 @@ final class GameLayer: SKNode {
                         Neptune(),
                         Mercury()]
 
-        // Asteroid
-        self.asteroids = [AsteroidNode(), AsteroidNode(), AsteroidNode(), AsteroidNode(), AsteroidNode()]
+
 
         // Super
         super.init()
 
         // Add child
         addChild(sun)
-        planets.forEach({ addChild($0) })
+        planets.forEach({ planet in
+            addChild(planet)
+            planet.isActive = true
+            sun.addOrbitPath(orbitRadius: planet.orbitRadius)
+        })
+
+        // Observers
+        setupObservers()
+    }
+
+    @objc private func setupExplosion(_ notification: Notification) {
+        // Planets
+        planets.forEach({ planet in
+            planet.isActive = false
+            planet.position = CGPoint(x: CGFloat.random(in: backgroundFrame.minX...backgroundFrame.maxX), y: CGFloat.random(in: backgroundFrame.minY...backgroundFrame.maxY))
+            planet.setup()
+            sun.removeOrbitPath(orbitRadius: planet.orbitRadius)
+            planet.alpha = 0
+            planet.constraints = [
+                .positionX(SKRange(lowerLimit: backgroundFrame.minX + planet.size.width / 2)),
+                .positionX(SKRange(upperLimit: backgroundFrame.maxX - planet.size.width / 2)),
+                .positionY(SKRange(upperLimit: backgroundFrame.maxY - planet.size.height / 2)),
+                .positionY(SKRange(lowerLimit: backgroundFrame.minY + planet.size.height / 2))
+            ]
+        })
+    }
+
+    func setupSecondPhase() {
+        // Asteroid
+        self.asteroids = [AsteroidNode(),
+                          AsteroidNode(),
+                          AsteroidNode(),
+                          AsteroidNode(),
+                          AsteroidNode()]
+
+        asteroids.forEach({ addChild($0) })
+
+        self.setupAsteroids()
+        Timer.scheduledTimer(withTimeInterval: 30.0, repeats: true) { [weak self] _ in
+            self?.setupAsteroids()
+        }
+    }
+
+    func setupFirstPhase() {
+        // Planets
+        planets.forEach({ $0.alpha = 1 })
+
+        // Black holes
+        self.blackHoles = [BlackHoleNode(),
+                           BlackHoleNode(),
+                           BlackHoleNode()]
+
+
         blackHoles.forEach({ addChild($0) })
         asteroids.forEach({ addChild($0) })
 
@@ -70,21 +116,6 @@ final class GameLayer: SKNode {
         self.blackHoles.forEach { blackHole in
             blackHole.zPosition = -1
             blackHole.position = CGPoint(x: CGFloat.random(in: backgroundFrame.minX...backgroundFrame.maxX), y: CGFloat.random(in: backgroundFrame.minY...backgroundFrame.maxY))
-        }
-
-        // Planets
-        self.planets.forEach { planet in
-            planet.position = CGPoint(x: CGFloat.random(in: backgroundFrame.minX...backgroundFrame.maxX), y: CGFloat.random(in: backgroundFrame.minY...backgroundFrame.maxY))
-            planet.setup()
-        }
-
-        // Observers
-        setupObservers()
-
-        // Asteroid
-        self.setupAsteroids()
-        Timer.scheduledTimer(withTimeInterval: 30.0, repeats: true) { [weak self] _ in
-            self?.setupAsteroids()
         }
     }
 
@@ -117,6 +148,7 @@ final class GameLayer: SKNode {
 
     func setupObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(sunPositionDidChange(_:)), name: .sunPositionChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(setupExplosion(_:)), name: .explosionStarted, object: nil)
     }
 
     @objc private func sunPositionDidChange(_ notification: Notification) {
@@ -124,6 +156,7 @@ final class GameLayer: SKNode {
             guard !planet.isActive, !planet.removed else { continue }
             if sun.intersects(planet) {
                 planet.isActive = true
+                planet.constraints = []
                 sun.addOrbitPath(orbitRadius: planet.orbitRadius)
                 NotificationCenter.default.post(name: .planetCollected, object: nil, userInfo: ["text": "\(planet.name!) was rescued", "planet": planet.solarSystemPlanet])
             }
@@ -132,6 +165,7 @@ final class GameLayer: SKNode {
 
     deinit {
         NotificationCenter.default.removeObserver(self, name: .sunPositionChanged, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .explosionStarted, object: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {

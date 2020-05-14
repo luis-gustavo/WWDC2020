@@ -8,17 +8,6 @@
 
 import SpriteKit
 
-enum SolarSystemPlanet {
-    case mars
-    case earth
-    case venus
-    case mercury
-    case jupyter
-    case saturn
-    case uranus
-    case neptune
-}
-
 enum PlanetType {
     case sun
     case shootingStar
