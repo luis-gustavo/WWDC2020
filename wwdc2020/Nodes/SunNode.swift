@@ -25,6 +25,7 @@ final class SunNode: SKSpriteNode {
     // MARK: - Inits
     init() {
         super.init(texture: sprite, color: .clear, size: sprite.size())
+        name = PlanetType.sun.name
     }
 
     required init?(coder aDecoder: NSCoder) {

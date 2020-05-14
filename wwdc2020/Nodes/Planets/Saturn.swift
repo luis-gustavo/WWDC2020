@@ -9,11 +9,14 @@
 import SpriteKit
 
 class Saturn: SKSpriteNode, Planet {
+    var solarSystemPlanet: SolarSystemPlanet {
+        return SolarSystemPlanet.saturn
+    }
     var sprite: SKTexture = SKTexture(imageNamed: "Saturn")
     var lightColor: UIColor = UIColor(red: 252/255, green: 193/255, blue: 134/255, alpha: 1.0)
     var removed: Bool = false
-    var orbitRadius: CGPoint = CGPoint(x: 140, y: 140)
-    var period: CGFloat = 2
+    var orbitRadius: CGPoint = PlanetType.planet(.saturn).orbitRadius
+    var period: CGFloat = PlanetType.planet(.saturn).period
     var isActive: Bool = false {
         didSet {
             changeState(active: isActive)
@@ -23,7 +26,9 @@ class Saturn: SKSpriteNode, Planet {
 
     // MARK: - Inits
     init() {
-        super.init(texture: sprite, color: .clear, size: sprite.size())
+        let diameter = PlanetType.planet(.saturn).radius * 2
+        super.init(texture: sprite, color: .clear, size: CGSize(width: diameter * 1.5, height: diameter))
+        name = PlanetType.planet(.saturn).name
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -34,9 +39,9 @@ class Saturn: SKSpriteNode, Planet {
         if active {
             color = .clear
             colorBlendFactor = 0
-            physicsBody = SKPhysicsBody(circleOfRadius: PlanetType.planet.radius)
+            physicsBody = SKPhysicsBody(circleOfRadius: PlanetType.planet(.saturn).radius)
             physicsBody?.affectedByGravity = false
-            physicsBody?.fieldBitMask = PlanetType.planet.fieldMask
+            physicsBody?.fieldBitMask = PlanetType.planet(.saturn).fieldMask
             physicsBody?.allowsRotation = false
 
             // SKLight node

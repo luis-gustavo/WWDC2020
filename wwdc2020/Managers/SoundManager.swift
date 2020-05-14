@@ -8,26 +8,25 @@
 
 import AVFoundation
 
-class SoundManager {
+class SoundManager: NSObject {
+
+    private lazy var player: AVAudioPlayer = {
+        let player = try! AVAudioPlayer(contentsOf: Bundle.main.url(forResource: "WWDC-Song", withExtension: "mp3")!)
+        player.volume = 1
+        player.numberOfLoops = -1
+        return player
+    }()
 
     static let shared = SoundManager()
 
-    func start() {
-        let delay: TimeInterval = 10.0
-        let time = players.first!.deviceCurrentTime + delay
-        players.forEach({ player in
+    func start(with delay: TimeInterval) {
+        let time = player.deviceCurrentTime + delay
+            player.currentTime = 0
             player.play(atTime: time)
-        })
     }
 
-    private var players = [AVAudioPlayer]()
-
-    private init() {
-        players.append(try! AVAudioPlayer(contentsOf: Bundle.main.url(forResource: "HeavySynthBass", withExtension: "mp3")!))
-        players.append(try! AVAudioPlayer(contentsOf: Bundle.main.url(forResource: "HeavySynthBass2", withExtension: "mp3")!))
-        players.append(try! AVAudioPlayer(contentsOf: Bundle.main.url(forResource: "ClassicElectricPiano", withExtension: "mp3")!))
-        players.append(try! AVAudioPlayer(contentsOf: Bundle.main.url(forResource: "BigSawBass", withExtension: "mp3")!))
-        players.append(try! AVAudioPlayer(contentsOf: Bundle.main.url(forResource: "JumpUpBass", withExtension: "mp3")!))
-        players.append(try! AVAudioPlayer(contentsOf: Bundle.main.url(forResource: "TauregMoonBass", withExtension: "mp3")!))
+    func changeVolume(_ volume: Float) {
+        player.volume = volume
     }
+
 }

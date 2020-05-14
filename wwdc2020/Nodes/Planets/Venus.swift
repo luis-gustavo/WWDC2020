@@ -9,11 +9,14 @@
 import SpriteKit
 
 class Venus: SKSpriteNode, Planet {
+    var solarSystemPlanet: SolarSystemPlanet {
+        return SolarSystemPlanet.venus
+    }
     var sprite: SKTexture = SKTexture(imageNamed: "Venus")
     var lightColor: UIColor = .white
     var removed: Bool = false
-    var orbitRadius: CGPoint = CGPoint(x: 320, y: 320)
-    var period: CGFloat = 4
+    var orbitRadius: CGPoint = PlanetType.planet(.venus).orbitRadius
+    var period: CGFloat = PlanetType.planet(.venus).period
     var isActive: Bool = false {
         didSet {
             changeState(active: isActive)
@@ -23,7 +26,9 @@ class Venus: SKSpriteNode, Planet {
 
     // MARK: - Inits
     init() {
-        super.init(texture: sprite, color: .clear, size: sprite.size())
+        let diameter = PlanetType.planet(.venus).radius * 2
+        super.init(texture: sprite, color: .clear, size: CGSize(width: diameter, height: diameter))
+        name = PlanetType.planet(.venus).name
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -34,9 +39,9 @@ class Venus: SKSpriteNode, Planet {
         if active {
             color = .clear
             colorBlendFactor = 0
-            physicsBody = SKPhysicsBody(circleOfRadius: PlanetType.planet.radius)
+            physicsBody = SKPhysicsBody(circleOfRadius: PlanetType.planet(.venus).radius)
             physicsBody?.affectedByGravity = false
-            physicsBody?.fieldBitMask = PlanetType.planet.fieldMask
+            physicsBody?.fieldBitMask = PlanetType.planet(.venus).fieldMask
             physicsBody?.allowsRotation = false
 
             // SKLight node

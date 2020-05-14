@@ -9,11 +9,14 @@
 import SpriteKit
 
 class Uranus: SKSpriteNode, Planet {
+    var solarSystemPlanet: SolarSystemPlanet {
+        return SolarSystemPlanet.uranus
+    }
     var sprite: SKTexture = SKTexture(imageNamed: "Uranus")
     var lightColor: UIColor = UIColor(red: 39/255, green: 156/255, blue: 188/255, alpha: 1.0)
     var removed: Bool = false
-    var orbitRadius: CGPoint = CGPoint(x: 380, y: 380)
-    var period: CGFloat = 5
+    var orbitRadius: CGPoint = PlanetType.planet(.uranus).orbitRadius
+    var period: CGFloat = PlanetType.planet(.uranus).period
     var isActive: Bool = false {
         didSet {
             changeState(active: isActive)
@@ -23,7 +26,9 @@ class Uranus: SKSpriteNode, Planet {
 
     // MARK: - Inits
     init() {
-        super.init(texture: sprite, color: .clear, size: sprite.size())
+        let diameter = PlanetType.planet(.uranus).radius * 2
+        super.init(texture: sprite, color: .clear, size: CGSize(width: diameter, height: diameter))
+        name = PlanetType.planet(.uranus).name
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -34,9 +39,9 @@ class Uranus: SKSpriteNode, Planet {
         if active {
             color = .clear
             colorBlendFactor = 0
-            physicsBody = SKPhysicsBody(circleOfRadius: PlanetType.planet.radius)
+            physicsBody = SKPhysicsBody(circleOfRadius: PlanetType.planet(.uranus).radius)
             physicsBody?.affectedByGravity = false
-            physicsBody?.fieldBitMask = PlanetType.planet.fieldMask
+            physicsBody?.fieldBitMask = PlanetType.planet(.uranus).fieldMask
             physicsBody?.allowsRotation = false
 
             // SKLight node

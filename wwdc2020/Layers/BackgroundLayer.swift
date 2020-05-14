@@ -27,14 +27,14 @@ final class BackgroundLayer: SKNode {
 
         // Background
         addChild(background)
-        background.zPosition = -1
-        background.size = CGSize(width: size.width * 2, height: size.height * 2)
+        background.zPosition = -3
+        background.size = CGSize(width: size.width * 3, height: size.height * 3)
         background.lightingBitMask = PlanetType.background.fieldMask
 
         // Stars
         for _ in 1...50 {
             let star = StarNode(circleOfRadius: PlanetType.star.radius)
-            star.position = CGPoint(x: CGFloat.random(in: background.frame.minX ... background.frame.maxX), y: CGFloat.random(in: background.frame.minY ... background.frame.maxY))
+            star.position = CGPoint(x: CGFloat.random(in: background.frame.minX + 10 ... background.frame.maxX - 10), y: CGFloat.random(in: background.frame.minY + 10 ... background.frame.maxY - 10))
             star.setup()
             addChild(star)
         }
@@ -52,28 +52,27 @@ final class BackgroundLayer: SKNode {
     }
 
     func setupShootingStar() {
-        let coordinates: [(initial: CGPoint, final: (CGPoint))] = [
-            // Left to right
-            (CGPoint(x: background.frame.minX, y: background.frame.minY), (CGPoint(x: background.frame.maxX, y: background.frame.maxY))),
-            (CGPoint(x: background.frame.minX, y: background.frame.maxY), (CGPoint(x: background.frame.maxX, y: background.frame.minY))),
-            (CGPoint(x: background.frame.minX, y: background.frame.midY), (CGPoint(x: background.frame.maxX, y: background.frame.midY))),
-            (CGPoint(x: background.frame.minX, y: background.frame.midY), (CGPoint(x: background.frame.maxX, y: background.frame.maxY))),
-            (CGPoint(x: background.frame.minX, y: background.frame.midY), (CGPoint(x: background.frame.maxX, y: background.frame.minY))),
-            (CGPoint(x: background.frame.minX + (background.frame.maxX - background.frame.minX) * 0.3, y: background.frame.maxY), (CGPoint(x: background.frame.maxX, y: background.frame.minY))),
-            (CGPoint(x: background.frame.minX + (background.frame.maxX - background.frame.minX) * 0.3, y: background.frame.minY), (CGPoint(x: background.frame.maxX, y: background.frame.maxY))),
-            // Right to left
-            (CGPoint(x: background.frame.maxX, y: background.frame.minY), (CGPoint(x: background.frame.minX, y: background.frame.maxY))),
-            (CGPoint(x: background.frame.maxX, y: background.frame.maxY), (CGPoint(x: background.frame.minX, y: background.frame.minY))),
-            (CGPoint(x: background.frame.maxX, y: background.frame.midY), (CGPoint(x: background.frame.minX, y: background.frame.minY))),
-            (CGPoint(x: background.frame.maxX, y: background.frame.midY), (CGPoint(x: background.frame.minX, y: background.frame.maxY))),
-            (CGPoint(x: background.frame.maxX - ( background.frame.maxX - background.frame.minX) * 0.25, y: background.frame.minY), (CGPoint(x: background.frame.minX, y: background.frame.maxY))),
-            (CGPoint(x: background.frame.maxX - ( background.frame.maxX - background.frame.minX) * 0.25, y: background.frame.maxY), (CGPoint(x: background.frame.minX, y: background.frame.minY)))
-        ]
+        let random = Int.random(in: 1...4)
+        let initialPosition: CGPoint
+        let finalPosition: CGPoint
+        switch random {
+        case 1: // left to right
+            initialPosition = CGPoint(x: background.frame.minX - 20, y: CGFloat.random(in: background.frame.minY - 20 ... background.frame.maxY + 20))
+            finalPosition = CGPoint(x: background.frame.maxX + 20, y: CGFloat.random(in: background.frame.minY - 20 ... background.frame.maxY + 20))
+        case 2: // top to bottom
+            initialPosition = CGPoint(x: CGFloat.random(in: background.frame.minX - 20 ... background.frame.maxX + 20), y: background.frame.maxY + 20)
+            finalPosition = CGPoint(x: CGFloat.random(in: background.frame.minX - 20 ... background.frame.maxX + 20), y: background.frame.minY - 20)
+        case 3: // right to left
+            initialPosition = CGPoint(x: background.frame.maxX + 20, y: CGFloat.random(in: background.frame.minY - 20 ... background.frame.maxY + 20))
+            finalPosition = CGPoint(x: background.frame.minX - 20, y: CGFloat.random(in: background.frame.minY - 20 ... background.frame.maxY + 20))
+        default: // bottom to top
+            initialPosition = CGPoint(x: CGFloat.random(in: background.frame.minX - 20 ... background.frame.maxX + 20), y: background.frame.minY - 20)
+            finalPosition = CGPoint(x: CGFloat.random(in: background.frame.minX - 20 ... background.frame.maxX + 20), y: background.frame.maxY + 20)
+        }
 
         shootingStar.alpha = 1
-        let coordinate = coordinates.randomElement()!
-        shootingStar.position = coordinate.initial
-        let moveAction = SKAction.move(to: coordinate.final, duration: 5.0)
+        shootingStar.position = initialPosition
+        let moveAction = SKAction.move(to: finalPosition, duration: 5.0)
         let run = SKAction.run {
             self.shootingStar.lastPosition = nil
         }

@@ -9,11 +9,14 @@
 import SpriteKit
 
 class Jupyter: SKSpriteNode, Planet {
+    var solarSystemPlanet: SolarSystemPlanet {
+        return SolarSystemPlanet.jupyter
+    }
     var sprite: SKTexture = SKTexture(imageNamed: "Jupyter")
     var lightColor: UIColor = UIColor(red: 163/255, green: 143/255, blue: 127/255, alpha: 1.0)
     var removed: Bool = false
-    var orbitRadius: CGPoint = CGPoint(x: 200, y: 200)
-    var period: CGFloat = 3
+    var orbitRadius: CGPoint = PlanetType.planet(.jupyter).orbitRadius
+    var period: CGFloat = PlanetType.planet(.jupyter).period
     var isActive: Bool = false {
         didSet {
             changeState(active: isActive)
@@ -23,7 +26,9 @@ class Jupyter: SKSpriteNode, Planet {
 
     // MARK: - Inits
     init() {
-        super.init(texture: sprite, color: .clear, size: sprite.size())
+        let diameter = PlanetType.planet(.jupyter).radius * 2
+        super.init(texture: sprite, color: .clear, size: CGSize(width: diameter, height: diameter))
+        name = PlanetType.planet(.jupyter).name
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -34,9 +39,9 @@ class Jupyter: SKSpriteNode, Planet {
         if active {
             color = .clear
             colorBlendFactor = 0
-            physicsBody = SKPhysicsBody(circleOfRadius: PlanetType.planet.radius)
+            physicsBody = SKPhysicsBody(circleOfRadius: PlanetType.planet(.jupyter).radius)
             physicsBody?.affectedByGravity = false
-            physicsBody?.fieldBitMask = PlanetType.planet.fieldMask
+            physicsBody?.fieldBitMask = PlanetType.planet(.jupyter).fieldMask
             physicsBody?.allowsRotation = false
 
             // SKLight node

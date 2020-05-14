@@ -19,7 +19,7 @@ final class GameLayer: SKNode {
     var shortStartDelay: TimeInterval = 1.0
     var nodeAngularDistance: [CGFloat] = [0, 0, 0, 0, 0, 0, 0, 0]
     var blackHoles = [BlackHoleNode]()
-    let asteroid: Asteroid
+    var asteroids = [AsteroidNode]()
 
     // MARK: - Inits
     init(size: CGSize, backgroundFrame: CGRect) {
@@ -32,6 +32,12 @@ final class GameLayer: SKNode {
         self.sun = SunNode()
         sun.position = CGPoint(x: size.width/2, y: size.height/2)
         self.sun.setup()
+        sun.constraints = [
+            .positionX(SKRange(lowerLimit: backgroundFrame.minX + sun.size.width / 2)),
+            .positionX(SKRange(upperLimit: backgroundFrame.maxX - sun.size.width / 2)),
+            .positionY(SKRange(upperLimit: backgroundFrame.maxY - sun.size.height / 2)),
+            .positionY(SKRange(lowerLimit: backgroundFrame.minY + sun.size.height / 2))
+        ]
 
         // Black holes
         self.blackHoles = [BlackHoleNode(),
@@ -49,8 +55,7 @@ final class GameLayer: SKNode {
                         Mercury()]
 
         // Asteroid
-        self.asteroid = Asteroid(circleOfRadius: PlanetType.asteroid.radius)
-        asteroid.setup()
+        self.asteroids = [AsteroidNode(), AsteroidNode(), AsteroidNode(), AsteroidNode(), AsteroidNode()]
 
         // Super
         super.init()
@@ -59,10 +64,11 @@ final class GameLayer: SKNode {
         addChild(sun)
         planets.forEach({ addChild($0) })
         blackHoles.forEach({ addChild($0) })
-//        addChild(asteroid)
+        asteroids.forEach({ addChild($0) })
 
         // Black holes
         self.blackHoles.forEach { blackHole in
+            blackHole.zPosition = -1
             blackHole.position = CGPoint(x: CGFloat.random(in: backgroundFrame.minX...backgroundFrame.maxX), y: CGFloat.random(in: backgroundFrame.minY...backgroundFrame.maxY))
         }
 
@@ -76,30 +82,37 @@ final class GameLayer: SKNode {
         setupObservers()
 
         // Asteroid
-//        setupAsteroid()
-//        Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { [weak self] _ in
-//            self?.setupAsteroid()
-//        }
+        self.setupAsteroids()
+        Timer.scheduledTimer(withTimeInterval: 30.0, repeats: true) { [weak self] _ in
+            self?.setupAsteroids()
+        }
     }
 
-    func setupAsteroid() {
-        let coordinates: [(initial: CGPoint, final: (CGPoint))] = [
-            (CGPoint(x: backgroundFrame.minX, y: backgroundFrame.minY), (CGPoint(x: backgroundFrame.maxX, y: backgroundFrame.maxY))),
-            (CGPoint(x: backgroundFrame.minX, y: backgroundFrame.maxY), (CGPoint(x: backgroundFrame.maxX, y: backgroundFrame.minY))),
-            (CGPoint(x: backgroundFrame.minX, y: backgroundFrame.midY), (CGPoint(x: backgroundFrame.maxX, y: backgroundFrame.midY))),
-            (CGPoint(x: backgroundFrame.minX, y: backgroundFrame.midY), (CGPoint(x: backgroundFrame.maxX, y: backgroundFrame.maxY))),
-            (CGPoint(x: backgroundFrame.minX, y: backgroundFrame.midY), (CGPoint(x: backgroundFrame.maxX, y: backgroundFrame.minY))),
-            (CGPoint(x: backgroundFrame.minX + (backgroundFrame.maxX - backgroundFrame.minX) * 0.3, y: backgroundFrame.maxY), (CGPoint(x: backgroundFrame.maxX, y: backgroundFrame.minY))),
-            (CGPoint(x: backgroundFrame.minX + (backgroundFrame.maxX - backgroundFrame.minX) * 0.3, y: backgroundFrame.minY), (CGPoint(x: backgroundFrame.maxX, y: backgroundFrame.maxY)))
-            ]
+    func setupAsteroids() {
+        for asteroid in asteroids {
+            guard !asteroid.removed else { continue }
+            let random = Int.random(in: 1...4)
+            let initialPosition: CGPoint
+            let finalPosition: CGPoint
+            switch random {
+            case 1: // left to right
+                initialPosition = CGPoint(x: backgroundFrame.minX - 20, y: CGFloat.random(in: backgroundFrame.minY - 20 ... backgroundFrame.maxY + 20))
+                finalPosition = CGPoint(x: backgroundFrame.maxX + 20, y: CGFloat.random(in: backgroundFrame.minY - 20 ... backgroundFrame.maxY + 20))
+            case 2: // top to bottom
+                initialPosition = CGPoint(x: CGFloat.random(in: backgroundFrame.minX - 20 ... backgroundFrame.maxX + 20), y: backgroundFrame.maxY + 20)
+                finalPosition = CGPoint(x: CGFloat.random(in: backgroundFrame.minX - 20 ... backgroundFrame.maxX + 20), y: backgroundFrame.minY - 20)
+            case 3: // right to left
+                initialPosition = CGPoint(x: backgroundFrame.maxX + 20, y: CGFloat.random(in: backgroundFrame.minY - 20 ... backgroundFrame.maxY + 20))
+                finalPosition = CGPoint(x: backgroundFrame.minX - 20, y: CGFloat.random(in: backgroundFrame.minY - 20 ... backgroundFrame.maxY + 20))
+            default: // bottom to top
+                initialPosition = CGPoint(x: CGFloat.random(in: backgroundFrame.minX - 20 ... backgroundFrame.maxX + 20), y: backgroundFrame.minY - 20)
+                finalPosition = CGPoint(x: CGFloat.random(in: backgroundFrame.minX - 20 ... backgroundFrame.maxX + 20), y: backgroundFrame.maxY + 20)
+            }
 
-        asteroid.alpha = 1
-        let coordinate = coordinates.randomElement()!
-        asteroid.position = coordinate.initial
-        let moveAction = SKAction.move(to: coordinate.final, duration: 5.0)
-        let fadeOut = SKAction.fadeOut(withDuration: 1.5)
-        let sequence = SKAction.sequence([moveAction, fadeOut])
-        asteroid.run(sequence)
+            asteroid.position = initialPosition
+            let moveAction = SKAction.move(to: finalPosition, duration: 25.0)
+            asteroid.run(moveAction)
+        }
     }
 
     func setupObservers() {
@@ -112,6 +125,7 @@ final class GameLayer: SKNode {
             if sun.intersects(planet) {
                 planet.isActive = true
                 sun.addOrbitPath(orbitRadius: planet.orbitRadius)
+                NotificationCenter.default.post(name: .planetCollected, object: nil, userInfo: ["text": "\(planet.name!) was rescued", "planet": planet.solarSystemPlanet])
             }
         }
     }
@@ -148,14 +162,30 @@ final class GameLayer: SKNode {
             nodeAngularDistance[index] = node2AngularDistance
         }
 
-        blackHoles.forEach { (blackHole) in
+        blackHoles.forEach { blackHole in
             for index in 0 ..< planets.count {
                 let planet = planets[index]
-                guard !planet.removed else { continue }
+                guard !planet.removed, planet.isActive else { continue }
                 if blackHole.intersects(planet) {
                     planet.removed = true
                     blackHole.suckPlanet(planet)
                     sun.removeOrbitPath(orbitRadius: planet.orbitRadius)
+                    NotificationCenter.default.post(name: .planetCollidedWithBlackHole, object: nil, userInfo: ["text": "\(planet.name!) was absorbed by a black hole", "planet": planet.solarSystemPlanet])
+                }
+            }
+        }
+
+        asteroids.forEach { asteroid in
+            for index in 0 ..< planets.count {
+                let planet = planets[index]
+                guard !planet.removed, planet.isActive, !asteroid.removed else { continue }
+                if asteroid.intersects(planet) {
+                    planet.removed = true
+                    sun.removeOrbitPath(orbitRadius: planet.orbitRadius)
+                    planet.removeFromParent()
+                    asteroid.explosion()
+                    asteroid.removed = true
+                    NotificationCenter.default.post(name: .planetCollidedWithBlackHole, object: nil, userInfo: ["text": "\(planet.name!) was destroyed by an asteroid", "planet": planet.solarSystemPlanet])
                 }
             }
         }

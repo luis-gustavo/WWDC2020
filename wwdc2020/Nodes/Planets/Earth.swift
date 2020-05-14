@@ -9,11 +9,14 @@
 import SpriteKit
 
 class Earth: SKSpriteNode, Planet {
+    var solarSystemPlanet: SolarSystemPlanet {
+        return SolarSystemPlanet.earth
+    }
     var sprite: SKTexture = SKTexture(imageNamed: "Earth")
     var lightColor: UIColor = UIColor(red: 74/255, green: 166/255, blue: 203/255, alpha: 1.0)
     var removed: Bool = false
-    var orbitRadius: CGPoint = CGPoint(x: 260, y: 260)
-    var period: CGFloat = 3
+    var orbitRadius: CGPoint = PlanetType.planet(.earth).orbitRadius
+    var period: CGFloat = PlanetType.planet(.earth).period
     var isActive: Bool = false {
         didSet {
             changeState(active: isActive)
@@ -23,7 +26,9 @@ class Earth: SKSpriteNode, Planet {
 
     // MARK: - Inits
     init() {
-        super.init(texture: sprite, color: .clear, size: sprite.size())
+        let diameter = PlanetType.planet(.earth).radius * 2
+        super.init(texture: sprite, color: .clear, size: CGSize(width: diameter, height: diameter))
+        name = PlanetType.planet(.earth).name
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -34,9 +39,9 @@ class Earth: SKSpriteNode, Planet {
         if active {
             color = .clear
             colorBlendFactor = 0
-            physicsBody = SKPhysicsBody(circleOfRadius: PlanetType.planet.radius)
+            physicsBody = SKPhysicsBody(circleOfRadius: PlanetType.planet(.earth).radius)
             physicsBody?.affectedByGravity = false
-            physicsBody?.fieldBitMask = PlanetType.planet.fieldMask
+            physicsBody?.fieldBitMask = PlanetType.planet(.earth).fieldMask
             physicsBody?.allowsRotation = false
 
             // SKLight node

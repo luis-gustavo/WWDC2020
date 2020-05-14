@@ -16,13 +16,31 @@ protocol Planet: SKSpriteNode {
     var removed: Bool { get set }
     var sprite: SKTexture { get set }
     var lightColor: UIColor { get set }
+    var solarSystemPlanet: SolarSystemPlanet { get }
     func setup()
     func changeState(active: Bool)
+    func moveSlowly()
 }
 
 extension Planet {
     func setup() {
         color = .gray
         colorBlendFactor = 1.0
+        moveSlowly()
+    }
+
+    func moveSlowly() {
+        let wait = SKAction.wait(forDuration: 1.0)
+        let moveAction = SKAction.run { [weak self] in
+            let dx = CGFloat.random(in: -20...20)
+            let dy = CGFloat.random(in: -20...20)
+            let move = SKAction.move(by: CGVector(dx: dx, dy: dy), duration: 4.0)
+            self?.run(move)
+        }
+        let sequence = SKAction.sequence([moveAction, wait])
+        let repeatForever = SKAction.repeatForever(sequence)
+        run(repeatForever)
     }
 }
+
+

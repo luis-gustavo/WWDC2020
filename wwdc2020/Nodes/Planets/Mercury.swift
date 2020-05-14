@@ -9,11 +9,14 @@
 import SpriteKit
 
 class Mercury: SKSpriteNode, Planet {
+    var solarSystemPlanet: SolarSystemPlanet {
+        return SolarSystemPlanet.mercury
+    }
     var sprite: SKTexture = SKTexture(imageNamed: "Mercury")
     var lightColor: UIColor = UIColor(red: 251/255, green: 174/255, blue: 140/255, alpha: 1.0)
     var removed: Bool = false
-    var orbitRadius: CGPoint = CGPoint(x: 500, y: 500)
-    var period: CGFloat = 4
+    var orbitRadius: CGPoint = PlanetType.planet(.mercury).orbitRadius
+    var period: CGFloat = PlanetType.planet(.mercury).period
     var isActive: Bool = false {
         didSet {
             changeState(active: isActive)
@@ -23,7 +26,9 @@ class Mercury: SKSpriteNode, Planet {
 
     // MARK: - Inits
     init() {
-        super.init(texture: sprite, color: .clear, size: sprite.size())
+        let diameter = PlanetType.planet(.mercury).radius * 2
+        super.init(texture: sprite, color: .clear, size: CGSize(width: diameter, height: diameter))
+        name = PlanetType.planet(.mercury).name
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -34,9 +39,9 @@ class Mercury: SKSpriteNode, Planet {
         if active {
             color = .clear
             colorBlendFactor = 0
-            physicsBody = SKPhysicsBody(circleOfRadius: PlanetType.planet.radius)
+            physicsBody = SKPhysicsBody(circleOfRadius: PlanetType.planet(.mercury).radius)
             physicsBody?.affectedByGravity = false
-            physicsBody?.fieldBitMask = PlanetType.planet.fieldMask
+            physicsBody?.fieldBitMask = PlanetType.planet(.mercury).fieldMask
             physicsBody?.allowsRotation = false
 
             // SKLight node

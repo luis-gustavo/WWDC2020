@@ -9,11 +9,14 @@
 import SpriteKit
 
 class Neptune: SKSpriteNode, Planet {
+    var solarSystemPlanet: SolarSystemPlanet {
+        return SolarSystemPlanet.neptune
+    }
     var sprite: SKTexture = SKTexture(imageNamed: "Neptune")
     var lightColor: UIColor = UIColor(red: 160/255, green: 118/255, blue: 148/255, alpha: 1.0)
     var removed: Bool = false
-    var orbitRadius: CGPoint = CGPoint(x: 440, y: 440)
-    var period: CGFloat = 5
+    var orbitRadius: CGPoint = PlanetType.planet(.neptune).orbitRadius
+    var period: CGFloat = PlanetType.planet(.neptune).period
     var isActive: Bool = false {
         didSet {
             changeState(active: isActive)
@@ -23,7 +26,9 @@ class Neptune: SKSpriteNode, Planet {
 
     // MARK: - Inits
     init() {
-        super.init(texture: sprite, color: .clear, size: sprite.size())
+        let diameter = PlanetType.planet(.neptune).radius * 2
+        super.init(texture: sprite, color: .clear, size: CGSize(width: diameter, height: diameter))
+        name = PlanetType.planet(.neptune).name
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -34,9 +39,9 @@ class Neptune: SKSpriteNode, Planet {
         if active {
             color = .clear
             colorBlendFactor = 0
-            physicsBody = SKPhysicsBody(circleOfRadius: PlanetType.planet.radius)
+            physicsBody = SKPhysicsBody(circleOfRadius: PlanetType.planet(.neptune).radius)
             physicsBody?.affectedByGravity = false
-            physicsBody?.fieldBitMask = PlanetType.planet.fieldMask
+            physicsBody?.fieldBitMask = PlanetType.planet(.neptune).fieldMask
             physicsBody?.allowsRotation = false
 
             // SKLight node

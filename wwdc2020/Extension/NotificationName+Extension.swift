@@ -10,4 +10,7 @@ import Foundation
 
 extension Notification.Name {
     static let sunPositionChanged = Notification.Name("sunPositionChanged")
+    static let planetCollected = Notification.Name("planetCollected")
+    static let timeEnded = Notification.Name("timeEnded")
+    static let planetCollidedWithBlackHole = Notification.Name("planetCollidedWithBlackHole")
 }
