@@ -9,11 +9,12 @@
 import Foundation
 
 extension Notification.Name {
-    static let sunPositionChanged = Notification.Name("sunPositionChanged")
     static let planetCollected = Notification.Name("planetCollected")
     static let timeEnded = Notification.Name("timeEnded")
     static let planetCollidedWithBlackHole = Notification.Name("planetCollidedWithBlackHole")
     static let explosionStarted = Notification.Name("explosionStarted")
     static let explosionEnded = Notification.Name("explosionEnded")
     static let collectedAllPlanets = Notification.Name("collectedAllPlanets")
+    static let noMorePlanetsLeft = Notification.Name("noMorePlanetsLeft")
+    static let replay = Notification.Name("replay")
 }

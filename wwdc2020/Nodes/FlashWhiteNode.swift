@@ -14,10 +14,11 @@ class FlashWhiteNode: SKShapeNode {
         fillColor = .white
         alpha = 0
 
-        let fadeIn = SKAction.fadeIn(withDuration: 0.1)
-        let wait = SKAction.wait(forDuration: 0.5)
+        let fadeIn = SKAction.fadeIn(withDuration: 0.2)
+        let wait = SKAction.wait(forDuration: 1.0)
         let block1 = SKAction.run {
             NotificationCenter.default.post(name: .explosionStarted, object: nil)
+            SoundManager.shared.playSound(.flash)
         }
         let block2 = SKAction.run {
             NotificationCenter.default.post(name: .explosionEnded, object: nil)

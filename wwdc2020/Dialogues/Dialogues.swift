@@ -10,33 +10,35 @@ import Foundation
 
 enum DialogueScene {
     case intro
-    case climax
+    case climax(Int)
 
     var dialogue: [String] {
         switch self {
         case .intro:
             return [
-                "Tap on the screen to continue",
-                "... What just happened ?!",
-                "I think something just hit me",
-                "Oh no! Where are the planets ?",
+                "(Tap on the screen to play the next sentence)",
+                "...What just happened ?!",
+                "I think something just hitted us",
+                "Oh no!!! Where are all the planets ?",
                 "They can't survive long away from me",
                 "The space is cold and full of danger",
                 "Can you help me to rescue them ?",
-                "Remember to watch out for the black holes",
-                "If a planet touch it it will be absorved by it",
-                "You have one minute to save the most planets as you can",
+                "There are eight planets lost in space",
+                "We have one minute to save\n as most planets as we can",
+                "The future of the solar system relies in us",
+                "We must remember to watch\nout for the black holes",
+                "If a planet touches it, it will be absorbed by it",
                 "Let's go!!!"
             ]
-        case .climax:
+        case .climax(let planetsLost):
             return [
-                "Great! we collected them all",
-                "The solar system is saved",
+                "Great!",
+                "We saved \(planetsLost == 0 ? "all" : "some") of them",
                 "And everything can go back to nor...",
-                "Oh my god!",
-                "A meteor storm is coming!",
-                "Dodge the meteors, otherwise the planets will be destroyed",
-                "You have to survive for one minute"
+                "Oh no!!!",
+                "An asteroid storm is coming!",
+                "We must dodge the asteroids, otherwise\nthe planets will be destroyed",
+                "We need to keep the planets\nsafe for one minute"
             ]
         }
     }

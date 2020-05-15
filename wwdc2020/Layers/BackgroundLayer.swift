@@ -12,7 +12,7 @@ final class BackgroundLayer: SKNode {
 
     // MARK: - Properties
     let size: CGSize
-    let background = SKSpriteNode(imageNamed: "nebula")
+    let background = SKSpriteNode(imageNamed: "Background")
     let shootingStar: ShootingStarNode
 
     // MARK: - Inits
@@ -28,7 +28,13 @@ final class BackgroundLayer: SKNode {
         // Background
         addChild(background)
         background.zPosition = -3
-        background.size = CGSize(width: size.width * 3, height: size.height * 3)
+
+        switch UIDevice.current.userInterfaceIdiom {
+        case .phone:
+            background.size = CGSize(width: size.width * 5, height: size.height * 5)
+        default:
+            background.size = CGSize(width: size.width * 3, height: size.height * 3)
+        }
         background.lightingBitMask = PlanetType.background.fieldMask
 
         // Stars

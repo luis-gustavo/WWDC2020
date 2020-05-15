@@ -18,18 +18,18 @@ enum PlanetType {
 
     var radius: CGFloat {
         switch self {
-        case .sun: return 30
+        case .sun: return 60
         case .shootingStar: return 3
         case .planet (let solarSystemPlanet):
             switch solarSystemPlanet {
-            case .mars: return 12
-            case .earth: return 16
-            case .venus: return 16
-            case .mercury: return 10
-            case .jupyter: return 30
-            case .saturn: return 24
-            case .uranus: return 20
-            case .neptune: return 20
+            case .mars: return 14
+            case .earth: return 18
+            case .venus: return 18
+            case .mercury: return 12
+            case .jupyter: return 32
+            case .saturn: return 28
+            case .uranus: return 22
+            case .neptune: return 22
             }
         case .star: return 1
         case .asteroid: return 6

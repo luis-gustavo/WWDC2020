@@ -8,25 +8,47 @@
 
 import AVFoundation
 
-class SoundManager: NSObject {
+enum Sound {
+    case flash
+    case explosion
+    case blackHole
+    case planet
 
-    private lazy var player: AVAudioPlayer = {
-        let player = try! AVAudioPlayer(contentsOf: Bundle.main.url(forResource: "WWDC-Song", withExtension: "mp3")!)
-        player.volume = 1
-        player.numberOfLoops = -1
-        return player
-    }()
+    var resource: String {
+        switch self {
+        case .flash: return "flash"
+        case .explosion: return "explosion2"
+        case .blackHole: return "black-hole"
+        case .planet: return "planet3"
+        }
+    }
+
+    var resourceExtension: String {
+        switch self {
+        case .flash: return "mp3"
+        case .explosion: return "wav"
+        case .blackHole: return "wav"
+        case .planet: return "wav"
+        }
+    }
+}
+
+class SoundManager {
 
     static let shared = SoundManager()
 
-    func start(with delay: TimeInterval) {
-        let time = player.deviceCurrentTime + delay
-            player.currentTime = 0
-            player.play(atTime: time)
+    func playSound(_ sound: Sound) {
+        switch sound {
+        case .flash, .explosion, .blackHole, .planet:
+            sfxPlayer = try! AVAudioPlayer(contentsOf: Bundle.main.url(forResource: sound.resource, withExtension: sound.resourceExtension)!)
+            sfxPlayer?.prepareToPlay()
+            DispatchQueue.global().async {
+                self.sfxPlayer?.play()
+            }
+        }
     }
 
-    func changeVolume(_ volume: Float) {
-        player.volume = volume
-    }
+    private var sfxPlayer: AVAudioPlayer?
 
+    private init() {  }
 }

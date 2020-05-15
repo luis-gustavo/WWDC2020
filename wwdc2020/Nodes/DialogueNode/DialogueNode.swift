@@ -29,12 +29,21 @@ class DialogueNode: SKSpriteNode {
         addChild(dialogueLabel)
         dialogueLabel.fontColor = .white
         dialogueLabel.numberOfLines = 10
-        dialogueLabel.constraints = [
-            SKConstraint.positionX(SKRange(lowerLimit: frame.minX + 20, upperLimit: frame.maxX - 20))
-        ]
-        dialogueLabel.text = "asdasdasd"
-        dialogueLabel.position = CGPoint(x: dialogueLabel.position.x, y: dialogueLabel.position.y - dialogueLabel.frame.size.height/2)
-        dialogueLabel.text = ""
+//        dialogueLabel.constraints = [
+//            SKConstraint.positionX(SKRange(lowerLimit: frame.minX + 20, upperLimit: frame.maxX - 20))
+//        ]
+//        dialogueLabel.text = "asdasdasd"
+        dialogueLabel.horizontalAlignmentMode = .center
+        dialogueLabel.verticalAlignmentMode = .center
+//        dialogueLabel.position = CGPoint(x: dialogueLabel.position.x, y: dialogueLabel.position.y - dialogueLabel.frame.size.height/2)
+//        dialogueLabel.text = ""
+
+        switch UIDevice.current.userInterfaceIdiom {
+        case .phone:
+            dialogueLabel.fontSize = 28.0
+        default:
+            dialogueLabel.fontSize = 32.0
+        }
         alpha = 0
     }
 
@@ -47,6 +56,7 @@ class DialogueNode: SKSpriteNode {
         } else {
             let talk = self.currentTalks.removeFirst()
             dialogueLabel.text = talk
+            self.reposition()
             run(SKAction.fadeIn(withDuration: 1.0))
         }
     }
@@ -62,6 +72,7 @@ class DialogueNode: SKSpriteNode {
             let fadeOut = SKAction.fadeOut(withDuration: duration)
             let block = SKAction.run {
                 self.dialogueLabel.text = talk
+                self.reposition()
             }
             let fadeIn = SKAction.fadeIn(withDuration: duration)
             let sequence = SKAction.sequence([fadeOut, block, fadeIn])
@@ -69,7 +80,12 @@ class DialogueNode: SKSpriteNode {
         }
     }
 
+    func reposition() {
+//        dialogueLabel.position = CGPoint(x: 0, y: 0)
+    }
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
 }

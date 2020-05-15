@@ -35,14 +35,18 @@ final class HudLayer: SKNode {
     let flashNode: FlashWhiteNode
     let tapToStartLabel = SKLabelNode()
     let planetsLabel = SKLabelNode()
-    var planetsAmount = 8 {
-        didSet {
-            planetsLabel.text = "\(planetsCollected)/\(planetsAmount)"
-        }
-    }
+    let planetsAmount = 8
     var planetsCollected = 0 {
         didSet {
-            planetsLabel.text = "\(planetsCollected)/\(planetsAmount)"
+            planetsLabel.text = "\(planetsCollected)/\(planetsLost)/\(planetsAmount)"
+        }
+    }
+    var planetsLost = 0 {
+        didSet {
+            planetsLabel.text = "\(planetsCollected)/\(planetsLost)/\(planetsAmount)"
+            if planetsLost == 8 {
+                NotificationCenter.default.post(name: .noMorePlanetsLeft, object: nil)
+            }
         }
     }
 
@@ -52,7 +56,7 @@ final class HudLayer: SKNode {
 
         // Joystick
         joystick = Joystick(withDiameter: 80)
-        joystick.position = CGPoint(x: -size.width/2 + size.width * 0.1, y: -size.height/2 + size.height * 0.1)
+        joystick.position = CGPoint(x: 0/*-size.width/2 + size.width * 0.1*/, y: -size.height/2 + size.height * 0.1)
         joystick.alpha = 0
 
         // Timer label
@@ -79,21 +83,36 @@ final class HudLayer: SKNode {
         // Timer label
         self.timerLabel.fontColor = .white
         self.timerLabel.text = "Time left: 60"
-        self.timerLabel.position = CGPoint(x: size.width / 2 - timerLabel.frame.size.width / 2 - 20, y: size.height * 0.45)
         self.timerLabel.alpha = 0
 
         // Planets label
         planetsLabel.fontColor = .white
-        planetsLabel.text = "0/8"
-        planetsLabel.position = CGPoint(x: -size.width / 2 + planetsLabel.frame.size.width / 2 + 20, y: timerLabel.frame.origin.y)
+        planetsLabel.text = "0/0/8"
         planetsLabel.alpha = 0
 
         // Event label
         self.eventLabel.fontColor = .white
-        self.eventLabel.position = CGPoint(x: 0, y: size.height * 0.45)
         self.eventLabel.alpha = 0
 
-        // Joystick
+        switch UIDevice.current.userInterfaceIdiom {
+        case .phone:
+            self.eventLabel.fontSize = 28
+            self.eventLabel.position = CGPoint(x: 0, y: size.height * 0.3)
+            self.timerLabel.fontSize = 28
+            self.timerLabel.position = CGPoint(x: size.width / 2 - timerLabel.frame.size.width / 2 - 20, y: size.height * 0.4)
+            self.planetsLabel.fontSize = 28
+            self.planetsLabel.position = CGPoint(x: -size.width / 2 + planetsLabel.frame.size.width / 2 + 20, y: self.timerLabel.frame.origin.y)
+            tapToStartLabel.fontSize = 42
+        default:
+            self.eventLabel.fontSize = 32
+            self.eventLabel.position = CGPoint(x: 0, y: size.height * 0.4)
+            self.timerLabel.fontSize = 32
+            self.timerLabel.position = CGPoint(x: size.width / 2 - timerLabel.frame.size.width / 2 - 20, y: size.height * 0.45)
+            self.planetsLabel.fontSize = 32
+            self.planetsLabel.position = CGPoint(x: -size.width / 2 + planetsLabel.frame.size.width / 2 + 20, y: self.timerLabel.frame.origin.y)
+            tapToStartLabel.fontSize = 48
+        }
+
         joystick.on(.move, { [unowned self] joystick in
             let newVelocity = CGPoint(x: joystick.velocity.x / 4, y: joystick.velocity.y / 4)
             self.delegate?.joystickMoved(newVelocity)
@@ -122,6 +141,7 @@ final class HudLayer: SKNode {
         // Observers
         NotificationCenter.default.addObserver(self, selector: #selector(showEvent(_:)), name: .planetCollected, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(showEvent(_:)), name: .planetCollidedWithBlackHole, object: nil)
+
     }
 
     deinit {
@@ -149,8 +169,8 @@ final class HudLayer: SKNode {
         if eventText.contains("rescued") {
             planetsCollected += 1
         } else {
-            planetsAmount -= 1
             planetsCollected -= 1
+            planetsLost += 1
         }
 
         self.eventLabel.text = eventText
@@ -208,5 +228,27 @@ extension HudLayer: DialogueNodeProtocol {
     func dialogueFinished(_ dialogue: DialogueScene) {
         dialogueNode.run(.fadeOut(withDuration: 1.0))
         delegate?.dialogueFinished(dialogue)
+    }
+}
+
+func - (left: CGPoint, right: CGPoint) -> CGPoint {
+    return CGPoint(x: left.x - right.x, y: left.y - right.y)
+}
+
+//func / (left: CGPoint, right: CGPoint) -> CGPoint {
+//    return CGPoint(x: left.x / right.x, y: left.y / right.y)
+//}
+
+func / (point: CGPoint, scalar: CGFloat) -> CGPoint {
+    return CGPoint(x: point.x / scalar, y: point.y / scalar)
+}
+
+func * (point: CGPoint, scalar: CGFloat) -> CGPoint {
+    return CGPoint(x: point.x * scalar, y: point.y * scalar)
+}
+
+extension CGPoint {
+    func length() -> CGFloat {
+        return sqrt(x*x + y*y)
     }
 }

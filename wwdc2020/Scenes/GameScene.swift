@@ -15,20 +15,32 @@ final class GameScene: SKScene {
     let gameLayer: GameLayer
     let hudLayer: HudLayer
     let backgroundLayer: BackgroundLayer
-//    private var planets = [(SolarSystemPlanet, CGFloat)]()
+    let gameOverLayer: GameOverLayer
     let backgroundFrame: CGRect
     
     // MARK: - Inits
     override init(size: CGSize) {
         self.hudLayer = HudLayer(size: size)
+        self.gameOverLayer = GameOverLayer(size: size)
         self.backgroundLayer = BackgroundLayer(size: size)
-        self.backgroundFrame = CGRect(origin: CGPoint(x: backgroundLayer.background.frame.origin.x + backgroundLayer.background.size.width * 0.05,
-                                                      y: backgroundLayer.background.frame.origin.y + backgroundLayer.background.size.height * 0.05),
-                                      size: CGSize(width: backgroundLayer.background.size.width * 0.9,
-                                                   height: backgroundLayer.background.size.height * 0.9))
+        switch UIDevice.current.userInterfaceIdiom {
+        case .phone:
+            self.backgroundFrame = CGRect(origin: CGPoint(x: backgroundLayer.background.frame.origin.x + backgroundLayer.background.size.width * 0.1,
+                            y: backgroundLayer.background.frame.origin.y + backgroundLayer.background.size.height * 0.1),
+            size: CGSize(width: backgroundLayer.background.size.width * 0.8,
+                         height: backgroundLayer.background.size.height * 0.8))
+        default:
+            self.backgroundFrame = CGRect(origin: CGPoint(x: backgroundLayer.background.frame.origin.x + backgroundLayer.background.size.width * 0.05,
+                            y: backgroundLayer.background.frame.origin.y + backgroundLayer.background.size.height * 0.05),
+            size: CGSize(width: backgroundLayer.background.size.width * 0.9,
+                         height: backgroundLayer.background.size.height * 0.9))
+        }
+
         self.gameLayer = GameLayer(size: size, backgroundFrame: self.backgroundFrame)
 
         super.init(size: size)
+
+
 
         // Setup
         physicsWorld.gravity = .zero
@@ -36,15 +48,22 @@ final class GameScene: SKScene {
         // Add child
         addChild(gameLayer)
         addChild(backgroundLayer)
+        backgroundColor = .black
 
         // Camera
         setupCamera()
         self.camera?.addChild(hudLayer)
-        camera?.xScale = 1.2
-        camera?.yScale = 1.2
+
+        switch UIDevice.current.userInterfaceIdiom {
+        case .phone:
+            camera?.xScale = 1.7
+            camera?.yScale = 1.7
+        default:
+            camera?.xScale = 1.3
+            camera?.yScale = 1.3
+        }
 
         // Managers
-//        SoundManager.shared.start(with: 1.0)
         _ = GameManager.shared
 
         // Background layer
@@ -52,85 +71,64 @@ final class GameScene: SKScene {
 
         // Hud layer
         hudLayer.delegate = self
-//        hudLayer.startTimer()
-
 
         // Observers
         setupObservers()
     }
 
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: .explosionEnded, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .collectedAllPlanets, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .timeEnded, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .noMorePlanetsLeft, object: nil)
+    }
+
     func setupObservers() {
-//        NotificationCenter.default.addObserver(self, selector: #selector(zoomInCamera(_:)), name: .planetCollected, object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(zoomOutCamera(_:)), name: .planetCollidedWithBlackHole, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(setupDialogue(_:)), name: .explosionEnded, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(setupSecondDialogue(_:)), name: .collectedAllPlanets, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(timeEnded(_:)), name: .timeEnded, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(noMorePlanetsLeft(_:)), name: .noMorePlanetsLeft, object: nil)
+    }
+
+    @objc private func timeEnded(_ notification: Notification) {
+
+        if GameManager.shared.isInFirstPart {
+            hudLayer.planetsLost = hudLayer.planetsAmount - hudLayer.planetsCollected
+            gameLayer.removeUntakenPlanets()
+            setupSecondDialogue(Notification(name: .planetCollected))
+        } else {
+            // Won the game
+            gameLayer.setupGameOver()
+            showGameOverLayer()
+        }
+    }
+
+    func showGameOverLayer() {
+        hudLayer.removeFromParent()
+        camera?.addChild(gameOverLayer)
+        gameOverLayer.setupGameOverLayer(planetsSaved: hudLayer.planetsCollected, planetsLost: hudLayer.planetsLost)
+    }
+
+    @objc private func noMorePlanetsLeft(_ notification: Notification) {
+        gameLayer.setupGameOver()
+        showGameOverLayer()
     }
 
     @objc private func setupSecondDialogue(_ notification: Notification) {
 
+        GameManager.shared.isInFirstPart = false
+        gameLayer.prepareForSecondPhase()
         hudLayer.hidePlanetsLabel()
         GameManager.shared.inCustscene = true
         hudLayer.joystick.touchesEnded(Set<UITouch>(), with: nil)
         hudLayer.stopTimer()
-        hudLayer.startDialogue(.climax)
+        hudLayer.startDialogue(.climax(hudLayer.planetsLost))
         hudLayer.joystick.run(.fadeOut(withDuration: 1.0))
     }
 
     @objc private func setupDialogue(_ notification: Notification) {
         hudLayer.zPosition = 0
         hudLayer.startDialogue(.intro)
-    }
-
-//    private func mapPlanetToScale(_ planet: SolarSystemPlanet) -> CGFloat {
-//        switch planet {
-//            case .mars: return 1.05
-//            case .earth: return 1.15
-//            case .venus: return 1.1
-//            case .mercury: return 1.0
-//            case .jupyter: return 1.35
-//            case .saturn: return 1.3
-//            case .uranus: return 1.25
-//            case .neptune: return 1.2
-//        }
-//    }
-
-//    @objc private func zoomOutCamera(_ notification: Notification) {
-//        return
-//        guard let planet = notification.userInfo?["planet"] as? SolarSystemPlanet else {
-//            fatalError("The parameter must exist")
-//        }
-//        planets.removeAll(where: { $0.0 == planet })
-//
-//        if planets.isEmpty {
-//            let scaleAction = SKAction.scale(to: 1.0, duration: 1.0)
-//            camera?.run(scaleAction)
-//            return
-//        }
-//
-//        let currentScale = camera!.xScale
-//        if let biggestScale = planets.map({ $0.1 }).max(), biggestScale != currentScale {
-//            let scaleAction = SKAction.scale(to: biggestScale, duration: 1.0)
-//            camera?.run(scaleAction)
-//        }
-//    }
-//
-//    @objc private func zoomInCamera(_ notification: Notification) {
-//        return
-//        guard let planet = notification.userInfo?["planet"] as? SolarSystemPlanet else {
-//            fatalError("The parameter must exist")
-//        }
-//        planets.append((planet, mapPlanetToScale(planet)))
-//
-//        let currentScale = camera!.xScale
-//        if let biggestScale = planets.map({ $0.1 }).max(), biggestScale > currentScale {
-//            let scaleAction = SKAction.scale(to: biggestScale, duration: 1.0)
-//            camera?.run(scaleAction)
-//        }
-//    }
-
-    deinit {
-//        NotificationCenter.default.removeObserver(self, name: .planetCollected, object: nil)
-//        NotificationCenter.default.removeObserver(self, name: .planetCollidedWithBlackHole, object: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -151,14 +149,6 @@ final class GameScene: SKScene {
 extension GameScene {
     func setupCamera() {
         let camera = SKCameraNode()
-//        camera.constraints =
-//            [
-//            .distance(.init(upperLimit: 10), to: gameLayer.sun),
-//            .positionX(SKRange(lowerLimit: backgroundLayer.background.frame.minX + size.width/2 - 10)),
-//            .positionX(SKRange(upperLimit: backgroundLayer.background.frame.maxX - size.width/2 + 10)),
-//            .positionY(SKRange(upperLimit: backgroundLayer.background.frame.maxY - size.height/2 + 10)),
-//            .positionY(SKRange(lowerLimit: backgroundLayer.background.frame.minY + size.height/2 - 10))
-//        ]
         camera.constraints =
             [
             .distance(.init(upperLimit: 10), to: gameLayer.sun),
@@ -175,6 +165,9 @@ extension GameScene {
 extension GameScene {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         hudLayer.touchesBegan(touches, with: event)
+        if gameOverLayer.parent != nil {
+            gameOverLayer.touchesBegan(touches, with: event)
+        }
     }
 }
 

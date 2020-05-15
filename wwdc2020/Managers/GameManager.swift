@@ -13,6 +13,7 @@ class GameManager {
 
     var inCustscene = false
     var planetsCollected = 0
+    var isInFirstPart = true
 
     private init () {
         NotificationCenter.default.addObserver(self, selector: #selector(planetCollected(_:)), name: .planetCollected, object: nil)

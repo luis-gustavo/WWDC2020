@@ -15,16 +15,13 @@ final class SunNode: SKSpriteNode {
     var lightNode = SKLightNode()
     let sprite = SKTexture(imageNamed: "Sun")
     let lightColor = UIColor(red: 241/255, green: 192/255, blue: 47/255, alpha: 1.0)
-    override var position: CGPoint {
-        didSet {
-            NotificationCenter.default.post(name: .sunPositionChanged, object: nil, userInfo: ["position": position])
-        }
-    }
+    var safeArea: CGRect = .zero
     var orbitPaths = [(SKShapeNode, CGPoint)]()
 
     // MARK: - Inits
     init() {
-        super.init(texture: sprite, color: .clear, size: sprite.size())
+        let size = CGSize(width: PlanetType.sun.radius * 2, height: PlanetType.sun.radius * 2)
+        super.init(texture: sprite, color: .clear, size: size)
         name = PlanetType.sun.name
     }
 
