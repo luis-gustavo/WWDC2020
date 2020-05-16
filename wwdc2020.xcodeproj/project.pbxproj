@@ -29,7 +29,6 @@
 		6E8D32AF246594330048CCF1 /* ShootingStarNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8D32AE246594330048CCF1 /* ShootingStarNode.swift */; };
 		6E8D32C52465C2AF0048CCF1 /* NotificationName+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8D32C42465C2AF0048CCF1 /* NotificationName+Extension.swift */; };
 		6E8D32C72465C5D10048CCF1 /* CGPoint+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8D32C62465C5D10048CCF1 /* CGPoint+Extension.swift */; };
-		6E8D32C92465CE640048CCF1 /* Joystick.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8D32C82465CE640048CCF1 /* Joystick.swift */; };
 		6E8D32CB2465D3840048CCF1 /* HudLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8D32CA2465D3840048CCF1 /* HudLayer.swift */; };
 		6E8D32D6246603A30048CCF1 /* BackgroundLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8D32D5246603A30048CCF1 /* BackgroundLayer.swift */; };
 		6EC9F4FF246C372B00204598 /* GameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC9F4FE246C372B00204598 /* GameManager.swift */; };
@@ -47,7 +46,6 @@
 		6EE728762469D3A800C11CFC /* Mercury.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE728752469D3A800C11CFC /* Mercury.swift */; };
 		6EE728782469E32600C11CFC /* SKAction+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE728772469E32600C11CFC /* SKAction+Extension.swift */; };
 		6EE7287A2469E53A00C11CFC /* BlackHoleNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE728792469E53A00C11CFC /* BlackHoleNode.swift */; };
-		6EE7287C246A215600C11CFC /* Component.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE7287B246A215600C11CFC /* Component.swift */; };
 		6EEEAEF6246D7D0B00D0B355 /* FlashWhiteNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EEEAEF5246D7D0B00D0B355 /* FlashWhiteNode.swift */; };
 		6EEEAEF8246DE03200D0B355 /* GameOverLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EEEAEF7246DE03200D0B355 /* GameOverLayer.swift */; };
 		6EFBDF82246C97520048C682 /* Spark.sks in Resources */ = {isa = PBXBuildFile; fileRef = 6EFBDF80246C97520048C682 /* Spark.sks */; };
@@ -79,7 +77,6 @@
 		6E8D32AE246594330048CCF1 /* ShootingStarNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShootingStarNode.swift; sourceTree = "<group>"; };
 		6E8D32C42465C2AF0048CCF1 /* NotificationName+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationName+Extension.swift"; sourceTree = "<group>"; };
 		6E8D32C62465C5D10048CCF1 /* CGPoint+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGPoint+Extension.swift"; sourceTree = "<group>"; };
-		6E8D32C82465CE640048CCF1 /* Joystick.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Joystick.swift; sourceTree = "<group>"; };
 		6E8D32CA2465D3840048CCF1 /* HudLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HudLayer.swift; sourceTree = "<group>"; };
 		6E8D32D5246603A30048CCF1 /* BackgroundLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundLayer.swift; sourceTree = "<group>"; };
 		6EC9F4FE246C372B00204598 /* GameManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameManager.swift; sourceTree = "<group>"; };
@@ -97,7 +94,6 @@
 		6EE728752469D3A800C11CFC /* Mercury.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mercury.swift; sourceTree = "<group>"; };
 		6EE728772469E32600C11CFC /* SKAction+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SKAction+Extension.swift"; sourceTree = "<group>"; };
 		6EE728792469E53A00C11CFC /* BlackHoleNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlackHoleNode.swift; sourceTree = "<group>"; };
-		6EE7287B246A215600C11CFC /* Component.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Component.swift; sourceTree = "<group>"; };
 		6EEEAEF5246D7D0B00D0B355 /* FlashWhiteNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashWhiteNode.swift; sourceTree = "<group>"; };
 		6EEEAEF7246DE03200D0B355 /* GameOverLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOverLayer.swift; sourceTree = "<group>"; };
 		6EFBDF80246C97520048C682 /* Spark.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Spark.sks; sourceTree = "<group>"; };
@@ -189,7 +185,6 @@
 				6E8D32C32465C29A0048CCF1 /* Extension */,
 				6E8D32BB2465C1310048CCF1 /* Nodes */,
 				6E8D32BA24659F350048CCF1 /* Layers */,
-				6E8D32B024659E070048CCF1 /* Joystick */,
 				6E8D32A724657A540048CCF1 /* Core */,
 			);
 			path = wwdc2020;
@@ -206,15 +201,6 @@
 				6E8D328F24657A460048CCF1 /* AppDelegate.swift */,
 			);
 			path = Core;
-			sourceTree = "<group>";
-		};
-		6E8D32B024659E070048CCF1 /* Joystick */ = {
-			isa = PBXGroup;
-			children = (
-				6E8D32C82465CE640048CCF1 /* Joystick.swift */,
-				6EE7287B246A215600C11CFC /* Component.swift */,
-			);
-			path = Joystick;
 			sourceTree = "<group>";
 		};
 		6E8D32BA24659F350048CCF1 /* Layers */ = {
@@ -409,12 +395,10 @@
 				6E8D32C52465C2AF0048CCF1 /* NotificationName+Extension.swift in Sources */,
 				6E8D32AB24658F530048CCF1 /* PlanetType.swift in Sources */,
 				6EE728742469D35400C11CFC /* Neptune.swift in Sources */,
-				6EE7287C246A215600C11CFC /* Component.swift in Sources */,
 				6E8D329824657A460048CCF1 /* GameViewController.swift in Sources */,
 				6EE728702469D30400C11CFC /* Venus.swift in Sources */,
 				6EE7285524699C8700C11CFC /* StarNode.swift in Sources */,
 				6EE728532469884E00C11CFC /* Planet.swift in Sources */,
-				6E8D32C92465CE640048CCF1 /* Joystick.swift in Sources */,
 				6E8D329024657A460048CCF1 /* AppDelegate.swift in Sources */,
 				6E2DB8FD246D6E8200D2222A /* SolarSystemPlanet.swift in Sources */,
 			);
