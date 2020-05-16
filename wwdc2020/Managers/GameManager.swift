@@ -14,6 +14,7 @@ class GameManager {
     var inCustscene = false
     var planetsCollected = 0
     var isInFirstPart = true
+    var inIntro = true
 
     private init () {
         NotificationCenter.default.addObserver(self, selector: #selector(planetCollected(_:)), name: .planetCollected, object: nil)
@@ -31,6 +32,7 @@ class GameManager {
         isInFirstPart = true
         planetsCollected = 0
         inCustscene = false
+        inIntro = true
         NotificationCenter.default.removeObserver(self, name: .planetCollected, object: nil)
     }
 }

@@ -18,6 +18,7 @@ final class GameScene: SKScene {
     let gameOverLayer: GameOverLayer
     let backgroundFrame: CGRect
     
+    
     // MARK: - Inits
     override init(size: CGSize) {
         // Managers
@@ -124,10 +125,8 @@ final class GameScene: SKScene {
         gameLayer.prepareForSecondPhase()
         hudLayer.hidePlanetsLabel()
         GameManager.shared.inCustscene = true
-        hudLayer.joystick.touchesEnded(Set<UITouch>(), with: nil)
         hudLayer.stopTimer()
         hudLayer.startDialogue(.climax(hudLayer.planetsLost))
-        hudLayer.joystick.run(.fadeOut(withDuration: 1.0))
     }
 
     @objc private func setupDialogue(_ notification: Notification) {
@@ -169,16 +168,31 @@ extension GameScene {
 extension GameScene {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         hudLayer.touchesBegan(touches, with: event)
+        if !GameManager.shared.inCustscene {
+            gameLayer.touchesBegan(touches, with: event)
+        }
         if gameOverLayer.parent != nil {
             gameOverLayer.touchesBegan(touches, with: event)
+        }
+    }
+
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if !GameManager.shared.inCustscene {
+            gameLayer.touchesMoved(touches, with: event)
+        }
+    }
+
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if !GameManager.shared.inCustscene {
+            gameLayer.touchesEnded(touches, with: event)
         }
     }
 }
 
 extension GameScene: HudLayerDelegate {
-    func joystickMoved(_ velocity: CGPoint) {
-        self.gameLayer.moveSun(velocity: velocity)
-    }
+//    func joystickMoved(_ velocity: CGPoint) {
+//        self.gameLayer.moveSun(velocity: velocity)
+//    }
 
     func startCutscene() {
         SoundManager.shared.introPlayer.stop()
@@ -191,7 +205,6 @@ extension GameScene: HudLayerDelegate {
         case .intro:
             hudLayer.showPlanetsLabel()
             gameLayer.setupFirstPhase()
-            hudLayer.joystick.run(.fadeIn(withDuration: 1.0))
             hudLayer.startTimer(45)
             GameManager.shared.inCustscene = false
             SoundManager.shared.playSound(.gameplay)
@@ -199,7 +212,6 @@ extension GameScene: HudLayerDelegate {
             hudLayer.showPlanetsLabel()
             hudLayer.startTimer(30)
             gameLayer.setupSecondPhase()
-            hudLayer.joystick.run(.fadeIn(withDuration: 1.0))
             GameManager.shared.inCustscene = false
         }
     }

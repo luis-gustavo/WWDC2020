@@ -28,7 +28,8 @@ enum DialogueScene {
                 "The future of the solar system relies in us",
                 "We must remember to watch\nout for the black holes",
                 "If a planet touches it, it will be absorbed by it",
-                "Let's go!!!"
+                "Let's go!!!",
+                "(Touch and drag your finger on the screen to move)"
             ]
         case .climax(let planetsLost):
             return [

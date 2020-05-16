@@ -9,7 +9,6 @@
 import SpriteKit
 
 protocol HudLayerDelegate {
-    func joystickMoved(_ velocity: CGPoint)
     func startCutscene()
     func dialogueFinished(_ dialogue: DialogueScene)
 }
@@ -18,7 +17,6 @@ final class HudLayer: SKNode {
 
     // MARK: - Properties
     let size: CGSize
-    let joystick: Joystick
     var delegate: HudLayerDelegate?
     let eventLabel: SKLabelNode
     let timerLabel: SKLabelNode
@@ -54,11 +52,6 @@ final class HudLayer: SKNode {
     init(size: CGSize) {
         self.size = size
 
-        // Joystick
-        joystick = Joystick(withDiameter: 80)
-        joystick.position = CGPoint(x: 0/*-size.width/2 + size.width * 0.1*/, y: -size.height/2 + size.height * 0.1)
-        joystick.alpha = 0
-
         // Timer label
         self.timerLabel = SKLabelNode()
 
@@ -72,7 +65,6 @@ final class HudLayer: SKNode {
         super.init()
 
         // Add child
-        addChild(joystick)
         addChild(timerLabel)
         addChild(eventLabel)
         addChild(dialogueNode)
@@ -112,11 +104,6 @@ final class HudLayer: SKNode {
             self.planetsLabel.position = CGPoint(x: -size.width / 2 + planetsLabel.frame.size.width / 2 + 20, y: self.timerLabel.frame.origin.y)
             tapToStartLabel.fontSize = 48
         }
-
-        joystick.on(.move, { [unowned self] joystick in
-            let newVelocity = CGPoint(x: joystick.velocity.x / 4, y: joystick.velocity.y / 4)
-            self.delegate?.joystickMoved(newVelocity)
-        })
 
         // Tap to start label
         self.tapToStartLabel.fontColor = .white
@@ -216,15 +203,11 @@ final class HudLayer: SKNode {
 
         if tapToStartLabel.parent != nil {
             GameManager.shared.inCustscene = true
+            GameManager.shared.inIntro = false
             tapToStartLabel.removeFromParent()
             delegate?.startCutscene()
         } else if GameManager.shared.inCustscene {
             dialogueNode.nextDialogue()
-        } else {
-//            guard let sun = (parent?.parent as? GameScene)?.gameLayer.sun else { fatalError() }
-//            let touch = touches.first!
-//            let location = touch.location(in: self)
-//            sun.run(.move(to: location, duration: 1.0))
         }
     }
 }

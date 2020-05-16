@@ -21,6 +21,12 @@ final class GameLayer: SKNode {
     var nodeAngularDistance: [CGFloat] = [0, 0, 0, 0, 0, 0, 0, 0]
     var blackHoles = [BlackHoleNode]()
     var asteroids = [AsteroidNode]()
+    var velocity = CGPoint.zero
+    var timeVariation: TimeInterval = 0
+    var lastCallToUpdate: TimeInterval = 0
+    var lastTouchLocation: CGPoint?
+    let movePointsPerSecond: CGFloat = 600.0
+    var isTouching = false
 
     // MARK: - Inits
     init(size: CGSize, backgroundFrame: CGRect, backgroundFrameForAsteroids: CGRect) {
@@ -279,9 +285,25 @@ final class GameLayer: SKNode {
         fatalError("init(coder:) has not been implemented")
     }
 
+    func updateTimeVariation(currentTime: TimeInterval) {
+        if lastCallToUpdate > 0 {
+            timeVariation = currentTime - lastCallToUpdate
+        } else {
+            timeVariation = 0
+        }
+
+        lastCallToUpdate = currentTime
+    }
+
 
     // MARK: - Update
     func update(_ currentTime: TimeInterval) {
+        updateTimeVariation(currentTime: currentTime)
+        if isTouching, !GameManager.shared.inCustscene, !GameManager.shared.inIntro {
+            moveSun(velocity: velocity)
+        }
+        movimentationFunction()
+
         for index in 0 ..< planets.count {
             let planet = planets[index]
             guard planet.isActive, !planet.removed else { continue }
@@ -345,11 +367,66 @@ final class GameLayer: SKNode {
             }
         }
     }
+
+    func setVelocity(location: CGPoint) {
+        let moveVector = CGPoint(x: (location.x - sun.position.x),
+                                 y: (location.y - sun.position.y))
+
+        let length = CGFloat(sqrt(pow(moveVector.x, 2) + pow(moveVector.y, 2)))
+
+        let direction = CGPoint(x: (moveVector.x / length),
+                                y: (moveVector.y / length))
+
+        velocity = CGPoint(x: direction.x * movePointsPerSecond,
+                           y: direction.y * movePointsPerSecond)
+    }
+
+    func moveSun(velocity: CGPoint) {
+
+        let amountToMove = CGPoint(x: velocity.x * CGFloat(timeVariation),
+                                   y: velocity.y * CGFloat(timeVariation))
+
+        sun.position = CGPoint(
+            x: sun.position.x + amountToMove.x,
+            y: sun.position.y + amountToMove.y)
+    }
+
+    func movimentationFunction() {
+        if let lastTouchLocation = lastTouchLocation {
+            let diff = CGPoint(x:lastTouchLocation.x - sun.position.x,
+                               y: lastTouchLocation.y - sun.position.y)
+            let length = CGFloat(sqrt(pow(Double(diff.x), 2.0) + pow(Double(diff.y), 2.0)))
+            if length <= movePointsPerSecond * CGFloat(timeVariation) {
+                sun.position = lastTouchLocation
+                velocity = CGPoint.zero
+            } else {
+
+            }
+        }
+    }
 }
 
 extension GameLayer {
-    func moveSun(velocity: CGPoint) {
-        sun.position.x += velocity.x
-        sun.position.y += velocity.y
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        isTouching = true
+        if let touch = touches.first {
+            let touchLocation = touch.location(in: self)
+            setVelocity(location: touchLocation)
+            if touchLocation != lastTouchLocation {
+                lastTouchLocation = touchLocation
+            }
+        }
     }
+
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if let touch = touches.first {
+            let touchLocation = touch.location(in: self)
+            setVelocity(location: touchLocation)
+        }
+    }
+
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        isTouching = false
+    }
+
 }
