@@ -14,6 +14,7 @@ final class GameLayer: SKNode {
     // MARK: - Properties
     let size: CGSize
     let backgroundFrame: CGRect
+    let backgroundFrameForAsteroids: CGRect
     let sun: SunNode
     var planets = [Planet]()
     var shortStartDelay: TimeInterval = 1.0
@@ -22,22 +23,34 @@ final class GameLayer: SKNode {
     var asteroids = [AsteroidNode]()
 
     // MARK: - Inits
-    init(size: CGSize, backgroundFrame: CGRect) {
+    init(size: CGSize, backgroundFrame: CGRect, backgroundFrameForAsteroids: CGRect) {
 
         // Class properties setup
         self.size = size
         self.backgroundFrame = backgroundFrame
+        self.backgroundFrameForAsteroids = backgroundFrameForAsteroids
 
         // Sun
         self.sun = SunNode()
         sun.position = CGPoint(x: size.width/2, y: size.height/2)
         self.sun.setup()
-        sun.constraints = [
-            .positionX(SKRange(lowerLimit: backgroundFrame.minX + sun.size.width / 2)),
-            .positionX(SKRange(upperLimit: backgroundFrame.maxX - sun.size.width / 2)),
-            .positionY(SKRange(upperLimit: backgroundFrame.maxY - sun.size.height / 2)),
-            .positionY(SKRange(lowerLimit: backgroundFrame.minY + sun.size.height / 2))
-        ]
+
+        switch UIDevice.current.userInterfaceIdiom {
+        case .phone:
+            sun.constraints = [
+                .positionX(SKRange(lowerLimit: backgroundFrameForAsteroids.minX + sun.size.width + 20)),
+                .positionX(SKRange(upperLimit: backgroundFrameForAsteroids.maxX - sun.size.width - 20)),
+                .positionY(SKRange(upperLimit: backgroundFrameForAsteroids.maxY - sun.size.height - 10)),
+                .positionY(SKRange(lowerLimit: backgroundFrameForAsteroids.minY + sun.size.height + 10))
+            ]
+        default:
+            sun.constraints = [
+                .positionX(SKRange(lowerLimit: backgroundFrame.minX + sun.size.width / 2)),
+                .positionX(SKRange(upperLimit: backgroundFrame.maxX - sun.size.width / 2)),
+                .positionY(SKRange(upperLimit: backgroundFrame.maxY - sun.size.height / 2)),
+                .positionY(SKRange(lowerLimit: backgroundFrame.minY + sun.size.height / 2))
+            ]
+        }
         sun.safeArea = CGRect(origin: sun.position, size: CGSize(width: 1000, height: 1000))
         sun.safeArea.origin = CGPoint(x: sun.position.x - sun.safeArea.size.width/2, y: sun.position.y - sun.safeArea.size.height/2)
 
@@ -69,6 +82,7 @@ final class GameLayer: SKNode {
     @objc private func setupExplosion(_ notification: Notification) {
         // Planets
         let randomIndex = Int.random(in: 0...7)
+        var count = 0
         for index in 0 ..< planets.count {
             let planet = planets[index]
             planet.isActive = false
@@ -77,9 +91,26 @@ final class GameLayer: SKNode {
             repeat {
                 if index == randomIndex {
                     let pos = CGPoint(x: CGFloat.random(in: sun.safeArea.minX...sun.safeArea.maxX), y: CGFloat.random(in: sun.safeArea.minY...sun.safeArea.maxY))
-                    newPosition = pos
+                    let rect = CGRect(origin: CGPoint(x: pos.x - planet.size.width/2, y: pos.y - planet.size.height/2), size: planet.size)
+                    newPosition = sun.frame.intersects(rect) ? nil : pos
                 } else {
-                    let pos = CGPoint(x: CGFloat.random(in: backgroundFrame.minX...backgroundFrame.maxX), y: CGFloat.random(in: backgroundFrame.minY...backgroundFrame.maxY))
+                    let x: CGFloat
+                    let y: CGFloat
+                    switch index {
+                    case 0, 1:
+                        x = CGFloat.random(in: backgroundFrame.minX...backgroundFrame.midX)
+                        y = CGFloat.random(in: backgroundFrame.midY...backgroundFrame.maxY)
+                    case 2, 3:
+                        x = CGFloat.random(in: backgroundFrame.midX...backgroundFrame.maxX)
+                        y = CGFloat.random(in: backgroundFrame.midY...backgroundFrame.maxY)
+                    case 4, 5:
+                        x = CGFloat.random(in: backgroundFrame.minX...backgroundFrame.midX)
+                        y = CGFloat.random(in: backgroundFrame.minY...backgroundFrame.midY)
+                    default:
+                        x = CGFloat.random(in: backgroundFrame.midX...backgroundFrame.maxX)
+                        y = CGFloat.random(in: backgroundFrame.minY...backgroundFrame.midY)
+                    }
+                    let pos = CGPoint(x: x, y: y)
                     newPosition = sun.safeArea.contains(pos) ? nil : pos
                 }
             } while newPosition == nil
@@ -93,6 +124,7 @@ final class GameLayer: SKNode {
                 .positionY(SKRange(upperLimit: backgroundFrame.maxY - planet.size.height / 2)),
                 .positionY(SKRange(lowerLimit: backgroundFrame.minY + planet.size.height / 2))
             ]
+            count += 1
         }
     }
 
@@ -127,18 +159,13 @@ final class GameLayer: SKNode {
             blackHole.position = newPosition!
         }
 
-        // Asteroid
-        self.asteroids = [AsteroidNode(),
-                          AsteroidNode(),
-                          AsteroidNode(),
-                          AsteroidNode(),
-                          AsteroidNode()]
-
-        asteroids.forEach({ addChild($0) })
-
+        // Asteroids
         self.setupAsteroids()
-        Timer.scheduledTimer(withTimeInterval: 30.0, repeats: true) { [weak self] _ in
+        Timer.scheduledTimer(withTimeInterval: 10.0, repeats: false) { [weak self] _ in
             self?.setupAsteroids()
+            Timer.scheduledTimer(withTimeInterval: 10.0, repeats: false) { _ in
+                self?.setupAsteroids()
+            }
         }
     }
 
@@ -154,7 +181,6 @@ final class GameLayer: SKNode {
 
 
         blackHoles.forEach({ addChild($0) })
-        asteroids.forEach({ addChild($0) })
 
         // Black holes
         for index in 0 ..< blackHoles.count {
@@ -186,35 +212,43 @@ final class GameLayer: SKNode {
     }
 
     func prepareForSecondPhase() {
-        blackHoles.forEach({ $0.run(.fadeOut(withDuration: 1.0)) })
+        blackHoles.forEach({ $0.alpha = 0 })
         sun.position = CGPoint(x: size.width/2, y: size.height/2)
     }
 
     func setupAsteroids() {
-        for asteroid in asteroids {
+
+        let _asteroids = [AsteroidNode(), AsteroidNode(), AsteroidNode(), AsteroidNode()]
+
+        for index in 0 ..< _asteroids.count {
+            let asteroid = _asteroids[index]
+
             guard !asteroid.removed else { continue }
-            let random = Int.random(in: 1...4)
             let initialPosition: CGPoint
             let finalPosition: CGPoint
-            switch random {
-            case 1: // left to right
-                initialPosition = CGPoint(x: backgroundFrame.minX - 20, y: CGFloat.random(in: backgroundFrame.minY - 20 ... backgroundFrame.maxY + 20))
-                finalPosition = CGPoint(x: backgroundFrame.maxX + 20, y: CGFloat.random(in: backgroundFrame.minY - 20 ... backgroundFrame.maxY + 20))
-            case 2: // top to bottom
-                initialPosition = CGPoint(x: CGFloat.random(in: backgroundFrame.minX - 20 ... backgroundFrame.maxX + 20), y: backgroundFrame.maxY + 20)
-                finalPosition = CGPoint(x: CGFloat.random(in: backgroundFrame.minX - 20 ... backgroundFrame.maxX + 20), y: backgroundFrame.minY - 20)
-            case 3: // right to left
-                initialPosition = CGPoint(x: backgroundFrame.maxX + 20, y: CGFloat.random(in: backgroundFrame.minY - 20 ... backgroundFrame.maxY + 20))
-                finalPosition = CGPoint(x: backgroundFrame.minX - 20, y: CGFloat.random(in: backgroundFrame.minY - 20 ... backgroundFrame.maxY + 20))
+            let offset: CGFloat = -50
+            switch index {
+            case 0: // left to right
+                initialPosition = CGPoint(x: backgroundFrameForAsteroids.minX - 50, y: CGFloat.random(in: backgroundFrameForAsteroids.minY - offset ... backgroundFrameForAsteroids.maxY + offset))
+                finalPosition = CGPoint(x: backgroundFrameForAsteroids.maxX + offset, y: CGFloat.random(in: backgroundFrameForAsteroids.minY - offset ... backgroundFrameForAsteroids.maxY + offset))
+            case 1: // top to bottom
+                initialPosition = CGPoint(x: CGFloat.random(in: backgroundFrameForAsteroids.minX - offset ... backgroundFrameForAsteroids.maxX + offset), y: backgroundFrameForAsteroids.maxY + offset)
+                finalPosition = CGPoint(x: CGFloat.random(in: backgroundFrameForAsteroids.minX - offset ... backgroundFrameForAsteroids.maxX + offset), y: backgroundFrameForAsteroids.minY - offset)
+            case 2: // right to left
+                initialPosition = CGPoint(x: backgroundFrameForAsteroids.maxX + offset, y: CGFloat.random(in: backgroundFrameForAsteroids.minY - offset ... backgroundFrameForAsteroids.maxY + offset))
+                finalPosition = CGPoint(x: backgroundFrameForAsteroids.minX - offset, y: CGFloat.random(in: backgroundFrameForAsteroids.minY - offset ... backgroundFrameForAsteroids.maxY + offset))
             default: // bottom to top
-                initialPosition = CGPoint(x: CGFloat.random(in: backgroundFrame.minX - 20 ... backgroundFrame.maxX + 20), y: backgroundFrame.minY - 20)
-                finalPosition = CGPoint(x: CGFloat.random(in: backgroundFrame.minX - 20 ... backgroundFrame.maxX + 20), y: backgroundFrame.maxY + 20)
+                initialPosition = CGPoint(x: CGFloat.random(in: backgroundFrameForAsteroids.minX - offset ... backgroundFrameForAsteroids.maxX + offset), y: backgroundFrameForAsteroids.minY - offset)
+                finalPosition = CGPoint(x: CGFloat.random(in: backgroundFrameForAsteroids.minX - offset ... backgroundFrameForAsteroids.maxX + offset), y: backgroundFrameForAsteroids.maxY + offset)
             }
 
+            addChild(asteroid)
             asteroid.position = initialPosition
-            let moveAction = SKAction.move(to: finalPosition, duration: 25.0)
+            let moveAction = SKAction.move(to: finalPosition, duration: 20)
             asteroid.run(moveAction)
         }
+
+        self.asteroids.append(contentsOf: _asteroids)
     }
 
     func setupObservers() {

@@ -20,6 +20,11 @@ final class GameScene: SKScene {
     
     // MARK: - Inits
     override init(size: CGSize) {
+        // Managers
+        _ = GameManager.shared
+        _ = SoundManager.shared
+
+        // Setup
         self.hudLayer = HudLayer(size: size)
         self.gameOverLayer = GameOverLayer(size: size)
         self.backgroundLayer = BackgroundLayer(size: size)
@@ -36,11 +41,9 @@ final class GameScene: SKScene {
                          height: backgroundLayer.background.size.height * 0.9))
         }
 
-        self.gameLayer = GameLayer(size: size, backgroundFrame: self.backgroundFrame)
+        self.gameLayer = GameLayer(size: size, backgroundFrame: self.backgroundFrame, backgroundFrameForAsteroids: self.backgroundLayer.background.frame)
 
         super.init(size: size)
-
-
 
         // Setup
         physicsWorld.gravity = .zero
@@ -56,15 +59,12 @@ final class GameScene: SKScene {
 
         switch UIDevice.current.userInterfaceIdiom {
         case .phone:
-            camera?.xScale = 1.7
-            camera?.yScale = 1.7
+            camera?.xScale = 2.0
+            camera?.yScale = 2.0
         default:
-            camera?.xScale = 1.3
-            camera?.yScale = 1.3
+            camera?.xScale = 1.4
+            camera?.yScale = 1.4
         }
-
-        // Managers
-        _ = GameManager.shared
 
         // Background layer
         backgroundLayer.zPosition = -2
@@ -74,6 +74,8 @@ final class GameScene: SKScene {
 
         // Observers
         setupObservers()
+
+        SoundManager.shared.playSound(.intro)
     }
 
     deinit {
@@ -91,13 +93,11 @@ final class GameScene: SKScene {
     }
 
     @objc private func timeEnded(_ notification: Notification) {
-
         if GameManager.shared.isInFirstPart {
             hudLayer.planetsLost = hudLayer.planetsAmount - hudLayer.planetsCollected
             gameLayer.removeUntakenPlanets()
             setupSecondDialogue(Notification(name: .planetCollected))
         } else {
-            // Won the game
             gameLayer.setupGameOver()
             showGameOverLayer()
         }
@@ -105,8 +105,12 @@ final class GameScene: SKScene {
 
     func showGameOverLayer() {
         hudLayer.removeFromParent()
+        gameOverLayer.removeFromParent()
         camera?.addChild(gameOverLayer)
         gameOverLayer.setupGameOverLayer(planetsSaved: hudLayer.planetsCollected, planetsLost: hudLayer.planetsLost)
+        SoundManager.shared.gameplayPlayer.stop()
+        SoundManager.shared.introPlayer.play()
+        GameManager.shared.gameOver()
     }
 
     @objc private func noMorePlanetsLeft(_ notification: Notification) {
@@ -177,6 +181,7 @@ extension GameScene: HudLayerDelegate {
     }
 
     func startCutscene() {
+        SoundManager.shared.introPlayer.stop()
         hudLayer.zPosition = 10
         hudLayer.flash()
     }
@@ -187,11 +192,12 @@ extension GameScene: HudLayerDelegate {
             hudLayer.showPlanetsLabel()
             gameLayer.setupFirstPhase()
             hudLayer.joystick.run(.fadeIn(withDuration: 1.0))
-            hudLayer.startTimer()
+            hudLayer.startTimer(45)
             GameManager.shared.inCustscene = false
+            SoundManager.shared.playSound(.gameplay)
         case .climax:
             hudLayer.showPlanetsLabel()
-            hudLayer.startTimer()
+            hudLayer.startTimer(30)
             gameLayer.setupSecondPhase()
             hudLayer.joystick.run(.fadeIn(withDuration: 1.0))
             GameManager.shared.inCustscene = false

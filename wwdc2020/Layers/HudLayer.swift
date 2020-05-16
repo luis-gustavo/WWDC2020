@@ -22,7 +22,7 @@ final class HudLayer: SKNode {
     var delegate: HudLayerDelegate?
     let eventLabel: SKLabelNode
     let timerLabel: SKLabelNode
-    var timerValue: Int = 60 {
+    var timerValue: Int = 45 {
         didSet {
             timerLabel.text = "Time left: \(timerValue)"
             if timerValue == 0 {
@@ -82,7 +82,7 @@ final class HudLayer: SKNode {
 
         // Timer label
         self.timerLabel.fontColor = .white
-        self.timerLabel.text = "Time left: 60"
+        self.timerLabel.text = "Time left: 45"
         self.timerLabel.alpha = 0
 
         // Planets label
@@ -192,8 +192,9 @@ final class HudLayer: SKNode {
         planetsLabel.run(.fadeOut(withDuration: 1.0))
     }
 
-    func startTimer() {
-        self.timerValue = 60
+    func startTimer(_ value: Int) {
+        self.timerValue = value
+        self.timerLabel.text = "Time left: \(value)"
         let wait = SKAction.wait(forDuration: 1)
         let run = SKAction.run { [weak self] in
             guard let self = self else { return }
@@ -209,7 +210,6 @@ final class HudLayer: SKNode {
     func stopTimer() {
         self.timerLabel.removeAllActions()
         self.timerLabel.run(.fadeOut(withDuration: 1.0))
-
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -220,6 +220,11 @@ final class HudLayer: SKNode {
             delegate?.startCutscene()
         } else if GameManager.shared.inCustscene {
             dialogueNode.nextDialogue()
+        } else {
+//            guard let sun = (parent?.parent as? GameScene)?.gameLayer.sun else { fatalError() }
+//            let touch = touches.first!
+//            let location = touch.location(in: self)
+//            sun.run(.move(to: location, duration: 1.0))
         }
     }
 }
@@ -228,27 +233,5 @@ extension HudLayer: DialogueNodeProtocol {
     func dialogueFinished(_ dialogue: DialogueScene) {
         dialogueNode.run(.fadeOut(withDuration: 1.0))
         delegate?.dialogueFinished(dialogue)
-    }
-}
-
-func - (left: CGPoint, right: CGPoint) -> CGPoint {
-    return CGPoint(x: left.x - right.x, y: left.y - right.y)
-}
-
-//func / (left: CGPoint, right: CGPoint) -> CGPoint {
-//    return CGPoint(x: left.x / right.x, y: left.y / right.y)
-//}
-
-func / (point: CGPoint, scalar: CGFloat) -> CGPoint {
-    return CGPoint(x: point.x / scalar, y: point.y / scalar)
-}
-
-func * (point: CGPoint, scalar: CGFloat) -> CGPoint {
-    return CGPoint(x: point.x * scalar, y: point.y * scalar)
-}
-
-extension CGPoint {
-    func length() -> CGFloat {
-        return sqrt(x*x + y*y)
     }
 }

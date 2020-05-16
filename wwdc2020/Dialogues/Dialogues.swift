@@ -24,7 +24,7 @@ enum DialogueScene {
                 "The space is cold and full of danger",
                 "Can you help me to rescue them ?",
                 "There are eight planets lost in space",
-                "We have one minute to save\n as most planets as we can",
+                "We have forty five seconds to save \nas most planets as we can",
                 "The future of the solar system relies in us",
                 "We must remember to watch\nout for the black holes",
                 "If a planet touches it, it will be absorbed by it",
@@ -38,7 +38,7 @@ enum DialogueScene {
                 "Oh no!!!",
                 "An asteroid storm is coming!",
                 "We must dodge the asteroids, otherwise\nthe planets will be destroyed",
-                "We need to keep the planets\nsafe for one minute"
+                "We need to keep the planets\nsafe for thirty seconds"
             ]
         }
     }

@@ -33,7 +33,7 @@ final class BackgroundLayer: SKNode {
         case .phone:
             background.size = CGSize(width: size.width * 5, height: size.height * 5)
         default:
-            background.size = CGSize(width: size.width * 3, height: size.height * 3)
+            background.size = CGSize(width: size.width * 4, height: size.height * 4)
         }
         background.lightingBitMask = PlanetType.background.fieldMask
 
@@ -78,7 +78,7 @@ final class BackgroundLayer: SKNode {
 
         shootingStar.alpha = 1
         shootingStar.position = initialPosition
-        let moveAction = SKAction.move(to: finalPosition, duration: 5.0)
+        let moveAction = SKAction.move(to: finalPosition, duration: 6.0)
         let run = SKAction.run {
             self.shootingStar.lastPosition = nil
         }

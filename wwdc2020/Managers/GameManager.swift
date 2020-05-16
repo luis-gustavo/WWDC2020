@@ -26,4 +26,11 @@ class GameManager {
             NotificationCenter.default.removeObserver(self, name: .planetCollected, object: nil)
         }
     }
+
+    func gameOver() {
+        isInFirstPart = true
+        planetsCollected = 0
+        inCustscene = false
+        NotificationCenter.default.removeObserver(self, name: .planetCollected, object: nil)
+    }
 }
